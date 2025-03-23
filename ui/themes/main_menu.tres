@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://ckyum57p5fedg"]
+
+[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="1_6djmp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6djmp"]
+content_margin_left = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6djmp"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[resource]
+default_font = ExtResource("1_6djmp")
+Label/fonts/font = ExtResource("1_6djmp")
+Label/styles/normal = SubResource("StyleBoxEmpty_6djmp")
+Panel/styles/panel = SubResource("StyleBoxFlat_6djmp")

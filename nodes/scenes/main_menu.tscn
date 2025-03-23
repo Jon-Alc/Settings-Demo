@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3 uid="uid://whhj017wq32w"]
+
+[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu.tres" id="1_1yc21"]
+[ext_resource type="PackedScene" uid="uid://wkqpmhh3p3i0" path="res://nodes/components/main_menu_label.tscn" id="2_ythhp"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenuOptions" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -144.0
+offset_right = -32.0
+offset_bottom = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("1_1yc21")
+
+[node name="MenuLabels" type="Panel" parent="MainMenuOptions"]
+layout_mode = 1
+offset_right = 118.0
+offset_bottom = 108.0
+
+[node name="ContinueLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+layout_mode = 1
+offset_right = 77.0
+theme_override_font_sizes/font_size = 18
+text = "Continue"
+
+[node name="NewGameLebel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.333
+offset_right = 100.0
+offset_bottom = -2.333
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "New Game"
+
+[node name="SettingsLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 3.333
+offset_right = 76.0
+offset_bottom = 26.333
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "Settings"
+
+[node name="ExitLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 43.0
+offset_bottom = 0.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 18
+text = "Exit"
