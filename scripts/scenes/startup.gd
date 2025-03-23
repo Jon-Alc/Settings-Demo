@@ -11,5 +11,4 @@ func _ready() -> void:
 func on_main_menu_label_clicked(label_id):
 	match label_id:
 		GlobalEnums.MainMenuButtonID.SETTINGS:
-			main_menu.visible = false
 			settings.visible = true
