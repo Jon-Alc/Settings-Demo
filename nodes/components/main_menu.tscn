@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://whhj017wq32w"]
+[gd_scene load_steps=4 format=3 uid="uid://whhj017wq32w"]
 
-[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu.tres" id="1_1yc21"]
-[ext_resource type="PackedScene" uid="uid://wkqpmhh3p3i0" path="res://nodes/components/main_menu_label.tscn" id="2_ythhp"]
+[ext_resource type="Script" uid="uid://dg8hoccxbnsmv" path="res://scripts/components/main_menu.gd" id="1_1yymi"]
+[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu_option.tres" id="2_xm7gm"]
+[ext_resource type="PackedScene" uid="uid://wkqpmhh3p3i0" path="res://nodes/components/main_menu_label.tscn" id="3_mdgqf"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -10,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1yymi")
 
 [node name="MainMenuOptions" type="Panel" parent="."]
 layout_mode = 1
@@ -24,20 +26,21 @@ offset_right = -32.0
 offset_bottom = -36.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("1_1yc21")
+theme = ExtResource("2_xm7gm")
 
 [node name="MenuLabels" type="Panel" parent="MainMenuOptions"]
 layout_mode = 1
 offset_right = 118.0
 offset_bottom = 108.0
 
-[node name="ContinueLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+[node name="ContinueLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 offset_right = 77.0
 theme_override_font_sizes/font_size = 18
 text = "Continue"
+LABEL_ID = 1
 
-[node name="NewGameLebel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+[node name="NewGameLebel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -48,8 +51,9 @@ offset_bottom = -2.333
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
 text = "New Game"
+LABEL_ID = 2
 
-[node name="SettingsLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+[node name="SettingsLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -60,8 +64,9 @@ offset_bottom = 26.333
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
 text = "Settings"
+LABEL_ID = 3
 
-[node name="ExitLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("2_ythhp")]
+[node name="ExitLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -72,3 +77,4 @@ offset_bottom = 0.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 18
 text = "Exit"
+LABEL_ID = 4

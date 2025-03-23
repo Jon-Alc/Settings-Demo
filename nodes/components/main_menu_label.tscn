@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://wkqpmhh3p3i0"]
+[gd_scene load_steps=4 format=3 uid="uid://wkqpmhh3p3i0"]
 
-[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu.tres" id="1_1yc21"]
+[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu_option.tres" id="1_1yc21"]
 [ext_resource type="Script" uid="uid://blr7x7v0iplf8" path="res://scripts/components/main_menu_label.gd" id="2_lun5g"]
+[ext_resource type="Theme" uid="uid://078ehdrguc22" path="res://ui/themes/option_selected.tres" id="3_2nxii"]
 
 [node name="MainMenuLabel" type="Label"]
 offset_right = 40.0
@@ -10,6 +11,9 @@ mouse_filter = 0
 theme = ExtResource("1_1yc21")
 text = "lorem ipsum"
 script = ExtResource("2_lun5g")
+MAIN_MENU_OPTION = ExtResource("1_1yc21")
+OPTION_SELECTED = ExtResource("3_2nxii")
 
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
