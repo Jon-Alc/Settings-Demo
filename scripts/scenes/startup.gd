@@ -1,5 +1,7 @@
-extends Control
+extends Node
 
+@onready var main_menu: Control = %MainMenu
+@onready var settings: Control = %Settings
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -9,4 +11,5 @@ func _ready() -> void:
 func on_main_menu_label_clicked(label_id):
 	match label_id:
 		GlobalEnums.MainMenuButtonID.SETTINGS:
-			print(label_id)
+			main_menu.visible = false
+			settings.visible = true

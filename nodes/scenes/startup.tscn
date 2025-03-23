@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmnxvhsl0cdoo"]
+[gd_scene load_steps=4 format=3 uid="uid://bmnxvhsl0cdoo"]
 
+[ext_resource type="Script" uid="uid://crfl23673fd1c" path="res://scripts/scenes/startup.gd" id="1_dsb71"]
 [ext_resource type="PackedScene" uid="uid://whhj017wq32w" path="res://nodes/components/main_menu.tscn" id="1_qa1fs"]
 [ext_resource type="PackedScene" uid="uid://gps0q53nkf22" path="res://nodes/scenes/settings.tscn" id="2_wwocq"]
 
 [node name="Startup" type="Node2D"]
+script = ExtResource("1_dsb71")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -12,7 +14,10 @@ offset_right = 640.0
 offset_bottom = 360.0
 
 [node name="MainMenu" parent="Control" instance=ExtResource("1_qa1fs")]
+unique_name_in_owner = true
 layout_mode = 1
 
 [node name="Settings" parent="Control" instance=ExtResource("2_wwocq")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 1
