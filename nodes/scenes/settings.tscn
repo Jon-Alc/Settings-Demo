@@ -1,4 +1,9 @@
-[gd_scene format=3 uid="uid://gps0q53nkf22"]
+[gd_scene load_steps=4 format=3 uid="uid://gps0q53nkf22"]
+
+[ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings.tres" id="1_lo1cw"]
+[ext_resource type="Theme" uid="uid://bsdwm2mbwpfuu" path="res://ui/themes/default_font.tres" id="2_kynh7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lo1cw"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -7,3 +12,157 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="SettingsContainer" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -288.0
+offset_top = -162.0
+offset_right = 288.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lo1cw")
+
+[node name="OptionsContainer" type="Panel" parent="SettingsContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -142.0
+offset_right = 240.0
+offset_bottom = 142.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lo1cw")
+
+[node name="SettingsLabel" type="Label" parent="SettingsContainer/OptionsContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme = ExtResource("2_kynh7")
+text = "settings"
+
+[node name="OptionsRow1" type="Panel" parent="SettingsContainer/OptionsContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -240.0
+offset_top = 60.0
+offset_bottom = 108.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lo1cw")
+
+[node name="ResolutionContainer" type="Panel" parent="SettingsContainer/OptionsContainer/OptionsRow1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -114.0
+offset_top = -18.0
+offset_right = 114.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lo1cw")
+
+[node name="SettingsLabel" type="Label" parent="SettingsContainer/OptionsContainer/OptionsRow1/ResolutionContainer"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 85.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme = ExtResource("2_kynh7")
+theme_override_font_sizes/font_size = 18
+text = "resolution"
+
+[node name="OptionButton" type="OptionButton" parent="SettingsContainer/OptionsContainer/OptionsRow1/ResolutionContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 2
+selected = 6
+item_count = 9
+popup/item_0/text = "3840x2160"
+popup/item_0/id = 0
+popup/item_1/text = "2560x1600"
+popup/item_1/id = 1
+popup/item_2/text = "2560x1440"
+popup/item_2/id = 2
+popup/item_3/text = "1920x1200"
+popup/item_3/id = 3
+popup/item_4/text = "1920x1080"
+popup/item_4/id = 4
+popup/item_5/text = "1600x900"
+popup/item_5/id = 5
+popup/item_6/text = "1366x768"
+popup/item_6/id = 6
+popup/item_7/text = "800x600"
+popup/item_7/id = 7
+popup/item_8/text = "640x480"
+popup/item_8/id = 8
+
+[node name="OptionsRow2" type="Panel" parent="SettingsContainer/OptionsContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -240.0
+offset_top = 108.0
+offset_right = 240.0
+offset_bottom = 156.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lo1cw")
+
+[node name="FullScreenContainer" type="Panel" parent="SettingsContainer/OptionsContainer/OptionsRow2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -16.5
+offset_right = 240.0
+offset_bottom = 16.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lo1cw")
+
+[node name="FullScreenLabel" type="Label" parent="SettingsContainer/OptionsContainer/OptionsRow2/FullScreenContainer"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = -11.5
+offset_right = 117.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme = ExtResource("2_kynh7")
+text = "full screen"

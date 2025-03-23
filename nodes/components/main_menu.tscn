@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1yymi")
 
-[node name="MainMenuOptions" type="Panel" parent="."]
+[node name="MenuContainer" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -28,19 +28,19 @@ grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("2_xm7gm")
 
-[node name="MenuLabels" type="Panel" parent="MainMenuOptions"]
+[node name="MenuLabels" type="Panel" parent="MenuContainer"]
 layout_mode = 1
 offset_right = 118.0
 offset_bottom = 108.0
 
-[node name="ContinueLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
+[node name="ContinueLabel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 offset_right = 77.0
 theme_override_font_sizes/font_size = 18
-text = "Continue"
+text = "continue"
 LABEL_ID = 1
 
-[node name="NewGameLebel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
+[node name="NewGameLebel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -50,10 +50,10 @@ offset_right = 100.0
 offset_bottom = -2.333
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
-text = "New Game"
+text = "new game"
 LABEL_ID = 2
 
-[node name="SettingsLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
+[node name="SettingsLabel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -63,10 +63,10 @@ offset_right = 76.0
 offset_bottom = 26.333
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
-text = "Settings"
+text = "settings"
 LABEL_ID = 3
 
-[node name="ExitLabel" parent="MainMenuOptions/MenuLabels" instance=ExtResource("3_mdgqf")]
+[node name="ExitLabel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -76,5 +76,5 @@ offset_right = 43.0
 offset_bottom = 0.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 18
-text = "Exit"
+text = "exit"
 LABEL_ID = 4
