@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhgjtpy8e5g5f"]
+
+[ext_resource type="Theme" uid="uid://dhrd85spnh15m" path="res://ui/themes/display_prompt/display_prompt_outer.tres" id="1_bc887"]
+[ext_resource type="Theme" uid="uid://ystgfb3djo54" path="res://ui/themes/display_prompt/display_prompt_inner.tres" id="1_ggd58"]
+[ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="3_1g7g0"]
+[ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="4_i35js"]
+
+[node name="DisplayPrompt" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OuterPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -67.5
+offset_right = 120.0
+offset_bottom = 67.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_bc887")
+
+[node name="InnerPanel" type="Panel" parent="OuterPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -112.0
+offset_top = 2.0
+offset_right = 112.0
+offset_bottom = 103.0
+grow_horizontal = 2
+theme = ExtResource("1_ggd58")
+
+[node name="AcceptButton" type="Button" parent="OuterPanel"]
+custom_minimum_size = Vector2(65, 26)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -72.5
+offset_top = -29.0
+offset_right = -7.5
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_1g7g0")
+theme_override_font_sizes/font_size = 16
+text = "Accept"
+
+[node name="CancelButton" type="Button" parent="OuterPanel"]
+custom_minimum_size = Vector2(65, 26)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 7.5
+offset_top = -29.0
+offset_right = 72.5
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_i35js")
+theme_override_font_sizes/font_size = 16
+text = "Cancel"

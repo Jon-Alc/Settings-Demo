@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://whhj017wq32w"]
 
-[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu_option.tres" id="2_xm7gm"]
+[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu/main_menu_option.tres" id="2_xm7gm"]
 [ext_resource type="PackedScene" uid="uid://wkqpmhh3p3i0" path="res://nodes/components/main_menu_label.tscn" id="3_mdgqf"]
 
 [node name="MainMenu" type="Control"]

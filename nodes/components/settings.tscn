@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://gps0q53nkf22"]
+[gd_scene load_steps=6 format=3 uid="uid://gps0q53nkf22"]
 
-[ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings.tres" id="1_kynh7"]
+[ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings/settings.tres" id="1_kynh7"]
 [ext_resource type="Script" uid="uid://b4gffn507f1ou" path="res://scripts/components/settings.gd" id="1_x5tc2"]
 [ext_resource type="Theme" uid="uid://bsdwm2mbwpfuu" path="res://ui/themes/default_font.tres" id="2_kynh7"]
+[ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="4_mdq1c"]
+[ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="5_3husx"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -286,6 +288,8 @@ offset_right = -23.0
 offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = ExtResource("4_mdq1c")
+theme_override_font_sizes/font_size = 0
 text = "Save Changes"
 
 [node name="CancelButton" type="Button" parent="OptionsContainer"]
@@ -302,7 +306,10 @@ offset_right = 137.0
 offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = ExtResource("5_3husx")
+theme_override_font_sizes/font_size = 16
 text = "Cancel"
 
+[connection signal="item_selected" from="OptionsContainer/GridContainer/Item1/HBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="OptionsContainer/SaveChangesButton" to="." method="_on_save_changes_button_pressed"]
 [connection signal="pressed" from="OptionsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

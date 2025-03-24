@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmnxvhsl0cdoo"]
+[gd_scene load_steps=5 format=3 uid="uid://bmnxvhsl0cdoo"]
 
 [ext_resource type="Script" uid="uid://crfl23673fd1c" path="res://scripts/scenes/startup.gd" id="1_dsb71"]
 [ext_resource type="PackedScene" uid="uid://whhj017wq32w" path="res://nodes/components/main_menu.tscn" id="1_qa1fs"]
 [ext_resource type="PackedScene" uid="uid://gps0q53nkf22" path="res://nodes/components/settings.tscn" id="2_wwocq"]
+[ext_resource type="PackedScene" uid="uid://bhgjtpy8e5g5f" path="res://nodes/components/display_prompt.tscn" id="4_5l68w"]
 
 [node name="Startup" type="Node2D"]
 script = ExtResource("1_dsb71")
@@ -20,4 +21,7 @@ layout_mode = 1
 [node name="Settings" parent="Control" instance=ExtResource("2_wwocq")]
 unique_name_in_owner = true
 visible = false
+layout_mode = 1
+
+[node name="DisplayPrompt" parent="Control" instance=ExtResource("4_5l68w")]
 layout_mode = 1

@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=4 format=3 uid="uid://078ehdrguc22"]
 
-[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="1_vqciq"]
+[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="1_w6emc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fbx4k"]
 content_margin_left = 16.0
@@ -12,8 +12,8 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 4
 
 [resource]
-default_font = ExtResource("1_vqciq")
+default_font = ExtResource("1_w6emc")
 Label/colors/font_color = Color(0.875138, 0.704448, 0.556441, 1)
-Label/fonts/font = ExtResource("1_vqciq")
+Label/fonts/font = ExtResource("1_w6emc")
 Label/styles/normal = SubResource("StyleBoxFlat_fbx4k")
 Panel/styles/panel = SubResource("StyleBoxFlat_6djmp")

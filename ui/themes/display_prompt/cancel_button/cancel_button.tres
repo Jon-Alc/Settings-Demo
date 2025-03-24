@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://cmq43yn0uvmha"]
+
+[ext_resource type="StyleBox" uid="uid://wk5st6jgtjfm" path="res://ui/themes/display_prompt/cancel_button/cancel_button_hover.tres" id="1_hlv38"]
+[ext_resource type="StyleBox" uid="uid://b8sijexu5m583" path="res://ui/themes/display_prompt/cancel_button/cancel_button_normal.tres" id="2_1ofxi"]
+[ext_resource type="StyleBox" uid="uid://cjr7hgrkfa7nr" path="res://ui/themes/display_prompt/cancel_button/cancel_button_pressed.tres" id="3_fwm87"]
+[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="4_3jupk"]
+
+[resource]
+default_font = ExtResource("4_3jupk")
+Button/colors/font_focus_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/colors/font_hover_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/colors/font_pressed_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/styles/hover = ExtResource("1_hlv38")
+Button/styles/normal = ExtResource("2_1ofxi")
+Button/styles/pressed = ExtResource("3_fwm87")

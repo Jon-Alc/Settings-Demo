@@ -1,5 +1,6 @@
 extends Node
 
+var options_data_path : String = ""
 @onready var main_menu: Control = %MainMenu
 @onready var settings: Control = %Settings
 

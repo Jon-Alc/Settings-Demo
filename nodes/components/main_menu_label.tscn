@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://wkqpmhh3p3i0"]
 
-[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu_option.tres" id="1_1yc21"]
+[ext_resource type="Theme" uid="uid://ckyum57p5fedg" path="res://ui/themes/main_menu/main_menu_option.tres" id="1_1yc21"]
 [ext_resource type="Script" uid="uid://blr7x7v0iplf8" path="res://scripts/components/main_menu_label.gd" id="2_lun5g"]
-[ext_resource type="Theme" uid="uid://078ehdrguc22" path="res://ui/themes/main_menu_option_selected.tres" id="3_2nxii"]
+[ext_resource type="Theme" uid="uid://078ehdrguc22" path="res://ui/themes/main_menu/main_menu_option_selected.tres" id="3_2nxii"]
 
 [node name="MainMenuLabel" type="Label"]
 offset_right = 40.0

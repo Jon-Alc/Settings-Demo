@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dwnkenuo17h4d"]
+
+[ext_resource type="StyleBox" uid="uid://cibgvp4ybh08v" path="res://ui/themes/display_prompt/accept_button/accept_button_hover.tres" id="1_ge2g1"]
+[ext_resource type="StyleBox" uid="uid://cjmkvavqnj4g1" path="res://ui/themes/display_prompt/accept_button/accept_button_normal.tres" id="2_ywno1"]
+[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="3_c5ebt"]
+[ext_resource type="StyleBox" uid="uid://ye4d85lqbg0y" path="res://ui/themes/display_prompt/accept_button/accept_button_pressed.tres" id="3_ywno1"]
+
+[resource]
+default_font = ExtResource("3_c5ebt")
+Button/colors/font_focus_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/colors/font_hover_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/colors/font_pressed_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/fonts/font = ExtResource("3_c5ebt")
+Button/styles/hover = ExtResource("1_ge2g1")
+Button/styles/normal = ExtResource("2_ywno1")
+Button/styles/pressed = ExtResource("3_ywno1")
