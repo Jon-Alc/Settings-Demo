@@ -16,4 +16,4 @@ func _on_mouse_exited() -> void:
 func _on_gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("LeftClick"):
 		# print("%s pressed" % MainMenuButtonID.keys()[LABEL_ID])
-		GlobalEvents.MainMenuLabelClicked.emit(LABEL_ID)
+		GlobalEvents.MainMenuLabelPressed.emit(LABEL_ID)

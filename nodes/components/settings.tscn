@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://gps0q53nkf22"]
+[gd_scene load_steps=8 format=3 uid="uid://gps0q53nkf22"]
 
-[ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings/settings.tres" id="1_kynh7"]
+[ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings/settings_outer_panel.tres" id="1_kynh7"]
 [ext_resource type="Script" uid="uid://b4gffn507f1ou" path="res://scripts/components/settings.gd" id="1_x5tc2"]
 [ext_resource type="Theme" uid="uid://bsdwm2mbwpfuu" path="res://ui/themes/default_font.tres" id="2_kynh7"]
 [ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="4_mdq1c"]
 [ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="5_3husx"]
+[ext_resource type="PackedScene" uid="uid://bhgjtpy8e5g5f" path="res://nodes/components/display_prompt.tscn" id="6_3husx"]
+[ext_resource type="Theme" uid="uid://owsfyu1qhnrq" path="res://ui/themes/settings/settings_inner_panel.tres" id="6_uieqa"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -15,7 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_x5tc2")
 
-[node name="OptionsContainer" type="Panel" parent="."]
+[node name="OuterOptionsContainer" type="Panel" parent="."]
 layout_mode = 2
 offset_left = 37.0
 offset_top = 23.0
@@ -25,7 +27,19 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_kynh7")
 
-[node name="SettingsLabel" type="Label" parent="OptionsContainer"]
+[node name="InnerSettingsContainer" type="Panel" parent="OuterOptionsContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -258.0
+offset_top = 6.0
+offset_right = 258.0
+offset_bottom = 266.0
+grow_horizontal = 2
+theme = ExtResource("6_uieqa")
+
+[node name="SettingsLabel" type="Label" parent="OuterOptionsContainer"]
 layout_mode = 2
 offset_left = 250.0
 offset_top = 16.0
@@ -37,7 +51,7 @@ size_flags_vertical = 0
 theme = ExtResource("2_kynh7")
 text = "settings"
 
-[node name="GridContainer" type="GridContainer" parent="OptionsContainer"]
+[node name="GridContainer" type="GridContainer" parent="OuterOptionsContainer"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -52,15 +66,15 @@ grow_horizontal = 2
 grow_vertical = 0
 columns = 2
 
-[node name="Item1" type="CenterContainer" parent="OptionsContainer/GridContainer"]
+[node name="Item1" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/GridContainer/Item1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item1"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="SettingsLabel" type="Label" parent="OptionsContainer/GridContainer/Item1/HBoxContainer"]
+[node name="SettingsLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item1/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -68,7 +82,7 @@ theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
 text = "resolution"
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GridContainer/Item1/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item1/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -95,19 +109,19 @@ popup/item_7/id = 7
 popup/item_8/text = "640x480"
 popup/item_8/id = 8
 
-[node name="Item2" type="Control" parent="OptionsContainer/GridContainer"]
+[node name="Item2" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item3" type="CenterContainer" parent="OptionsContainer/GridContainer"]
+[node name="Item3" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/GridContainer/Item3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item3"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OptionsContainer/GridContainer/Item3/HBoxContainer"]
+[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item3/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -115,7 +129,44 @@ theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
 text = "full screen"
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GridContainer/Item3/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item3/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+clip_text = true
+selected = 1
+fit_to_longest_item = false
+item_count = 4
+popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
+popup/item_1/text = "Windowed"
+popup/item_1/id = 1
+popup/item_2/text = "Borderless Fullscreen"
+popup/item_2/id = 2
+popup/item_3/text = "Borderless Windowed"
+popup/item_3/id = 3
+
+[node name="Item4" type="Control" parent="OuterOptionsContainer/GridContainer"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="Item5" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item5"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item5/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme = ExtResource("2_kynh7")
+theme_override_font_sizes/font_size = 18
+text = "full screen"
+
+[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item5/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -130,19 +181,19 @@ popup/item_1/id = 1
 popup/item_2/text = "Borderless Windowed"
 popup/item_2/id = 2
 
-[node name="Item4" type="Control" parent="OptionsContainer/GridContainer"]
+[node name="Item6" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item5" type="CenterContainer" parent="OptionsContainer/GridContainer"]
+[node name="Item7" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/GridContainer/Item5"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item7"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OptionsContainer/GridContainer/Item5/HBoxContainer"]
+[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item7/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -150,7 +201,7 @@ theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
 text = "full screen"
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GridContainer/Item5/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item7/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -165,19 +216,19 @@ popup/item_1/id = 1
 popup/item_2/text = "Borderless Windowed"
 popup/item_2/id = 2
 
-[node name="Item6" type="Control" parent="OptionsContainer/GridContainer"]
+[node name="Item8" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item7" type="CenterContainer" parent="OptionsContainer/GridContainer"]
+[node name="Item9" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/GridContainer/Item7"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item9"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OptionsContainer/GridContainer/Item7/HBoxContainer"]
+[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item9/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -185,7 +236,7 @@ theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
 text = "full screen"
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GridContainer/Item7/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item9/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -200,19 +251,19 @@ popup/item_1/id = 1
 popup/item_2/text = "Borderless Windowed"
 popup/item_2/id = 2
 
-[node name="Item8" type="Control" parent="OptionsContainer/GridContainer"]
+[node name="Item10" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item9" type="CenterContainer" parent="OptionsContainer/GridContainer"]
+[node name="Item11" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/GridContainer/Item9"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item11"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OptionsContainer/GridContainer/Item9/HBoxContainer"]
+[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item11/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -220,7 +271,7 @@ theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
 text = "full screen"
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GridContainer/Item9/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item11/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -235,46 +286,11 @@ popup/item_1/id = 1
 popup/item_2/text = "Borderless Windowed"
 popup/item_2/id = 2
 
-[node name="Item10" type="Control" parent="OptionsContainer/GridContainer"]
+[node name="Item12" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item11" type="CenterContainer" parent="OptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/GridContainer/Item11"]
-custom_minimum_size = Vector2(230, 0)
-layout_mode = 2
-
-[node name="FullScreenLabel" type="Label" parent="OptionsContainer/GridContainer/Item11/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 6
-theme = ExtResource("2_kynh7")
-theme_override_font_sizes/font_size = 18
-text = "full screen"
-
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GridContainer/Item11/HBoxContainer"]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-size_flags_horizontal = 6
-clip_text = true
-selected = 0
-fit_to_longest_item = false
-item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Windowed"
-popup/item_1/id = 1
-popup/item_2/text = "Borderless Windowed"
-popup/item_2/id = 2
-
-[node name="Item12" type="Control" parent="OptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
-layout_mode = 2
-
-[node name="SaveChangesButton" type="Button" parent="OptionsContainer"]
+[node name="SaveChangesButton" type="Button" parent="OuterOptionsContainer"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -283,16 +299,16 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -137.0
-offset_top = -43.0
+offset_top = -41.0
 offset_right = -23.0
-offset_bottom = -12.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("4_mdq1c")
 theme_override_font_sizes/font_size = 0
 text = "Save Changes"
 
-[node name="CancelButton" type="Button" parent="OptionsContainer"]
+[node name="CancelButton" type="Button" parent="OuterOptionsContainer"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -301,15 +317,20 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 23.0
-offset_top = -43.0
+offset_top = -41.0
 offset_right = 137.0
-offset_bottom = -12.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("5_3husx")
 theme_override_font_sizes/font_size = 16
 text = "Cancel"
 
-[connection signal="item_selected" from="OptionsContainer/GridContainer/Item1/HBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
-[connection signal="pressed" from="OptionsContainer/SaveChangesButton" to="." method="_on_save_changes_button_pressed"]
-[connection signal="pressed" from="OptionsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[node name="DisplayPrompt" parent="." instance=ExtResource("6_3husx")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Item1/HBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="OuterOptionsContainer/SaveChangesButton" to="." method="_on_save_changes_button_pressed"]
+[connection signal="pressed" from="OuterOptionsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
