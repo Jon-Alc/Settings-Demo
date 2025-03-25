@@ -7,23 +7,50 @@ extends Control
 var prompt_timer : SceneTreeTimer
 var player_responded_to_prompt : bool
 
-
+#region _ready() functions
 func _ready() -> void:
-	initialize()
-	GlobalEvents.DisplayPromptButtonPressed.connect(on_display_prompt_button_pressed)
-	GlobalEvents.DisplayPromptResponded.connect(on_display_prompt_responded)
+	_initialize()
+	GlobalEvents.DisplayPromptButtonPressed.connect(_on_display_prompt_button_pressed)
+	GlobalEvents.DisplayPromptResponded.connect(_on_display_prompt_responded)
+	
+	var readfile = FileAccess.open("user://settings.json", FileAccess.READ)
+	
+	if readfile:
+		_read_settings()
+	else:
+		_initialize_settings()
 
 
-func initialize() -> void:
-	reset_prompt_variables()
+
+func _initialize() -> void:
+	_reset_prompt_variables()
 
 
-func reset_prompt_variables() -> void:
-	print("Reseting prompt variables")
+func _reset_prompt_variables() -> void:
+	print("Resetting prompt variables")
 	prompt_timer = null
 	player_responded_to_prompt = false
 
 
+func _read_settings() -> void:
+	print("settings.json found")
+	
+	# if error parsing settings, re-initialize settings
+
+
+func _initialize_settings() -> void:
+	print("No settings.json found, making new one...")
+	var file = FileAccess.open("user://settings.json", FileAccess.WRITE)
+	print("Created settings.json")
+	file.store_string(  '{\n' +
+							'\t"resolution": "1366x768"\n' +
+						'}\n')
+	
+	
+	DisplayServer.window_set_size(Vector2i(1366, 768))
+#endregion
+
+#region Settings functions
 func _on_option_button_item_selected(index: int) -> void:
 	
 	match index:
@@ -44,10 +71,10 @@ func _on_option_button_item_selected(index: int) -> void:
 	
 	prompt_timer = get_tree().create_timer(15)
 	display_prompt.visible = true
-	await confirm_resolution_change()
+	await _confirm_resolution_change()
 	print("After it all")
 
-
+#region Signals
 func _on_save_changes_button_pressed() -> void:
 	GlobalEvents.SettingsSaveChangesPressed.emit()
 	settings.visible = false
@@ -57,7 +84,24 @@ func _on_cancel_button_pressed() -> void:
 	settings.visible = false
 
 
-func confirm_resolution_change() -> void:
+#region GlobalEvents
+## on_display_prompt_button_pressed is an event function intended to interrupt
+## confirm_resolution_change. This is until a cleaner way to StopCoroutine() has been found.
+func _on_display_prompt_button_pressed() -> void:
+	
+	if not prompt_timer:
+		return
+		
+	player_responded_to_prompt = true
+	prompt_timer.time_left = 0
+
+
+func _on_display_prompt_responded(response : bool) -> void:
+	print("on_display_prompt_responded" + str(response))
+#endregion
+#endregion
+
+func _confirm_resolution_change() -> void:
 	
 	while prompt_timer.time_left > 0:
 		display_prompt.prompt_text.text = "Would you like to keep these settings? (%s)" % str(int(prompt_timer.time_left))
@@ -67,19 +111,5 @@ func confirm_resolution_change() -> void:
 	if not player_responded_to_prompt:
 		GlobalEvents.DisplayPromptResponded.emit(false)
 	
-	reset_prompt_variables()
-
-
-## on_display_prompt_button_pressed is an event function intended to interrupt
-## confirm_resolution_change. This is until a cleaner way to StopCoroutine() has been found.
-func on_display_prompt_button_pressed() -> void:
-	
-	if not prompt_timer:
-		return
-		
-	player_responded_to_prompt = true
-	prompt_timer.time_left = 0
-
-
-func on_display_prompt_responded(response : bool) -> void:
-	print("on_display_prompt_responded" + str(response))
+	_reset_prompt_variables()
+#endregion
