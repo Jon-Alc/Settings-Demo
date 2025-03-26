@@ -13,14 +13,11 @@ func _ready() -> void:
 	GlobalEvents.DisplayPromptButtonPressed.connect(_on_display_prompt_button_pressed)
 	GlobalEvents.DisplayPromptResponded.connect(_on_display_prompt_responded)
 	
-	var readfile = FileAccess.open("user://settings.json", FileAccess.READ)
-	
-	if readfile:
-		_read_settings()
-	else:
+	if not FileAccess.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
+		print("No settings.json found, making new one...")
 		_initialize_settings()
 
-
+	_read_settings()
 
 func _initialize() -> void:
 	_reset_prompt_variables()
@@ -33,21 +30,39 @@ func _reset_prompt_variables() -> void:
 
 
 func _read_settings() -> void:
-	print("settings.json found")
+	var readfile : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.READ)
+	var settings_string : String = readfile.get_as_text()
+	print(settings_string)
 	
-	# if error parsing settings, re-initialize settings
+	var value = JSON.parse_string(settings_string)
+	print("value: " + str(value))
+	
+	if not value:
+		print("settings.json unable to be read, re-initializing settings...")
+		readfile = null
+		_initialize_settings()
+		_read_settings()
+	
+	var settings_dict : Dictionary = JSON.parse_string(settings_string)
+	print(settings_dict)
+	# DisplayServer.window_set_size(Vector2i(1366, 768))
 
 
 func _initialize_settings() -> void:
-	print("No settings.json found, making new one...")
-	var file = FileAccess.open("user://settings.json", FileAccess.WRITE)
-	print("Created settings.json")
-	file.store_string(  '{\n' +
-							'\t"resolution": "1366x768"\n' +
-						'}\n')
 	
+	# create settings folder and initialize settings.json file
+	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
+	dir.make_dir("settings")
 	
-	DisplayServer.window_set_size(Vector2i(1366, 768))
+	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
+		print("Settings file already exists, re-initializing...")
+		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
+			# it's possible that the file was opened earlier in the code
+			print("settings.json couldn't be deleted. Exiting...")
+			get_tree().quit(1)
+		
+	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
+	file.store_string(GlobalConsts.DEFAULT_SETTINGS_FILE_CONTENTS)
 #endregion
 
 #region Settings functions

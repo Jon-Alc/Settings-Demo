@@ -1,0 +1,2 @@
+Error codes:
+1 = settings.json couldn't be deleted

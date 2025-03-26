@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GlobalEvents="*res://scripts/autoloads/global_events.gd"
 GlobalEnums="*res://scripts/autoloads/global_enums.gd"
+GlobalConsts="*res://scripts/autoloads/global_consts.gd"
 
 [display]
 
