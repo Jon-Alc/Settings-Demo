@@ -22,6 +22,8 @@ func _ready() -> void:
 	GlobalEvents.DisplayPromptResponded.connect(_on_display_prompt_responded)
 
 
+## _initialize() initializes settings variables. It reads them from an existing settings.json file,
+## or creates a new one if one isn't found.
 func _initialize() -> void:
 	_reset_prompt_variables()
 	
@@ -32,12 +34,17 @@ func _initialize() -> void:
 	_read_settings()
 
 
+## _reset_prompt_variables() is called when the display prompt finishes an action, whether it's the
+## user button press or timeout.
 func _reset_prompt_variables() -> void:
 	print("Resetting prompt variables")
 	prompt_timer = null
 	player_responded_to_prompt = false
 
 
+## _read_settings() is called if there is an existing settings.json file. It parses the settings
+## file and sets the game's current settings. If the file can't be read, it deletes this file and
+## creates a new one.
 func _read_settings() -> void:
 	var readfile : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.READ)
 	var settings_string : String = readfile.get_as_text()
@@ -57,19 +64,13 @@ func _read_settings() -> void:
 	
 	resolution_setting = GlobalEnums.str_to_display_settings_id(res_value)
 	current_resolution = resolution_setting
-	new_resolution = resolution_setting
 	resolution_options.selected = resolution_setting
 	
-	var parsed_value : String = res_value.substr(1)
-	var split_values : Array = parsed_value.split("x")
+	_change_resolution(resolution_setting)
 
 
-	DisplayServer.window_set_size(
-		Vector2i(int(split_values[0]), int(split_values[1]))
-	)
-	_center_window()
-
-
+## _initialize_settings() is called if there is no settings.json file, or it can't be read. It
+## creates a new settings.json file in the AppData folder, and initializes default settings.
 func _initialize_settings() -> void:
 	
 	# create settings folder and initialize settings.json file
@@ -87,35 +88,9 @@ func _initialize_settings() -> void:
 	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
 	file.store_string(GlobalConsts.DEFAULT_SETTINGS_FILE_CONTENTS)
 #endregion
-
-#region Settings functions
-## _save_settings() takes the current settings session's variables and "overwrites" the settings
-## file by deleting it and creating it.
-func _save_settings():
-	# ensure folder exists--make_dir() doesn't do anything if the folder already exists
-	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
-	dir.make_dir("settings")
-	
-	# delete settings.json and save settings
-	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
-		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
-			# it's possible that the file was opened earlier in the code
-			print("settings.json couldn't be deleted. Exiting...")
-			get_tree().quit(1)
-		
-	var file_contents = \
-		'{\n' + \
-			'\t"resolution":"%s"\n' % GlobalEnums.DisplaySettingsID.keys()[current_resolution] + \
-		'}'	
-	print("to write:\n" + file_contents)
-	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
-	file.store_string(file_contents)
-
-
+#region Resolution feature functions
 ## _change_resolution() sets the window size to a given DisplaySettingsID and centers it.
 func _change_resolution(new_res: GlobalEnums.DisplaySettingsID) -> void:
-	
-	new_resolution = new_res
 	
 	match new_res:
 		GlobalEnums.DisplaySettingsID._3840x2160: DisplayServer.window_set_size(Vector2i(3840, 2160))
@@ -142,22 +117,18 @@ func _center_window() -> void:
 #region Signals
 ## Changes the resolution and opens a display prompt
 func _on_option_button_item_selected(index: int) -> void:
-	_change_resolution(GlobalEnums.int_to_display_settings_id(index))
+	new_resolution = GlobalEnums.int_to_display_settings_id(index)
+	_change_resolution(new_resolution)
 	await _confirm_resolution_change()
-	
-	
-func _on_save_changes_button_pressed() -> void:
-	GlobalEvents.SettingsSaveChangesPressed.emit()
-	_save_settings()
-	settings.visible = false
 
 
+## Reverts all settings to the settings.json file
 func _on_cancel_button_pressed() -> void:
 	
 	# undo all changes
 	if current_resolution != resolution_setting:
 		current_resolution = resolution_setting
-		new_resolution = resolution_setting
+		resolution_options.selected = resolution_setting
 		_change_resolution(resolution_setting)
 		
 	settings.visible = false
@@ -185,7 +156,6 @@ func _on_display_prompt_responded(response : bool) -> void:
 	if response: # if user accepts the resolution setting
 		current_resolution = new_resolution
 	else: # if user declines to keep the setting, or lets time run out
-		new_resolution = current_resolution
 		resolution_options.selected = current_resolution
 		_change_resolution(current_resolution)
 		display_prompt.visible = false
@@ -209,4 +179,42 @@ func _confirm_resolution_change() -> void:
 		GlobalEvents.DisplayPromptResponded.emit(false)
 	
 	_reset_prompt_variables()
+#endregion
+
+#region Window type feature functions
+
+#endregion
+
+#region Settings component-specific functions
+## _save_settings() takes the current settings session's variables and "overwrites" the settings
+## file by deleting it and creating it. It also updates the cached settings variables for this
+## session.
+func _save_settings():
+	
+	resolution_setting = current_resolution
+	
+	# ensure folder exists--make_dir() doesn't do anything if the folder already exists
+	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
+	dir.make_dir("settings")
+	
+	# delete settings.json and save settings
+	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
+		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
+			# it's possible that the file was opened earlier in the code
+			print("settings.json couldn't be deleted. Exiting...")
+			get_tree().quit(1)
+		
+	var file_contents = \
+		'{\n' + \
+			'\t"resolution":"%s"\n' % GlobalEnums.DisplaySettingsID.keys()[resolution_setting] + \
+		'}'	
+	print("to write:\n" + file_contents)
+	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
+	file.store_string(file_contents)
+#region Signals
+func _on_save_changes_button_pressed() -> void:
+	GlobalEvents.SettingsSaveChangesPressed.emit()
+	_save_settings()
+	settings.visible = false
+#endregion
 #endregion
