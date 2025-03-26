@@ -2,25 +2,34 @@ extends Control
 
 @onready var settings: Control = $"."
 @onready var display_prompt: Control = %DisplayPrompt
+@onready var resolution_options: OptionButton = %ResolutionOptions
 
 
 var prompt_timer : SceneTreeTimer
 var player_responded_to_prompt : bool
+
+## the resolution of the game, read from settings.json
+var resolution_setting : GlobalEnums.DisplaySettingsID
+## the resolution currently set while browsing the settings component
+var current_resolution : GlobalEnums.DisplaySettingsID
+## set when a new resolution option is selected
+var new_resolution : GlobalEnums.DisplaySettingsID
 
 #region _ready() functions
 func _ready() -> void:
 	_initialize()
 	GlobalEvents.DisplayPromptButtonPressed.connect(_on_display_prompt_button_pressed)
 	GlobalEvents.DisplayPromptResponded.connect(_on_display_prompt_responded)
+
+
+func _initialize() -> void:
+	_reset_prompt_variables()
 	
 	if not FileAccess.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
 		print("No settings.json found, making new one...")
 		_initialize_settings()
 
 	_read_settings()
-
-func _initialize() -> void:
-	_reset_prompt_variables()
 
 
 func _reset_prompt_variables() -> void:
@@ -35,8 +44,8 @@ func _read_settings() -> void:
 	print(settings_string)
 	
 	var value = JSON.parse_string(settings_string)
-	print("value: " + str(value))
 	
+	# if settings.json couldn't be read
 	if not value:
 		print("settings.json unable to be read, re-initializing settings...")
 		readfile = null
@@ -44,8 +53,21 @@ func _read_settings() -> void:
 		_read_settings()
 	
 	var settings_dict : Dictionary = JSON.parse_string(settings_string)
-	print(settings_dict)
-	# DisplayServer.window_set_size(Vector2i(1366, 768))
+	var res_value : String = settings_dict["resolution"]
+	
+	resolution_setting = GlobalEnums.str_to_display_settings_id(res_value)
+	current_resolution = resolution_setting
+	new_resolution = resolution_setting
+	resolution_options.selected = resolution_setting
+	
+	var parsed_value : String = res_value.substr(1)
+	var split_values : Array = parsed_value.split("x")
+
+
+	DisplayServer.window_set_size(
+		Vector2i(int(split_values[0]), int(split_values[1]))
+	)
+	_center_window()
 
 
 func _initialize_settings() -> void:
@@ -54,6 +76,7 @@ func _initialize_settings() -> void:
 	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
 	dir.make_dir("settings")
 	
+	# delete settings.json and re-initialize
 	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
 		print("Settings file already exists, re-initializing...")
 		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
@@ -66,42 +89,83 @@ func _initialize_settings() -> void:
 #endregion
 
 #region Settings functions
-func _on_option_button_item_selected(index: int) -> void:
+## _save_settings() takes the current settings session's variables and "overwrites" the settings
+## file by deleting it and creating it.
+func _save_settings():
+	# ensure folder exists--make_dir() doesn't do anything if the folder already exists
+	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
+	dir.make_dir("settings")
 	
-	match index:
-		0: DisplayServer.window_set_size(Vector2i(3840, 2160))
-		1: DisplayServer.window_set_size(Vector2i(2560, 1600))
-		2: DisplayServer.window_set_size(Vector2i(2560, 1440))
-		3: DisplayServer.window_set_size(Vector2i(1920, 1200))
-		4: DisplayServer.window_set_size(Vector2i(1920, 1080))
-		5: DisplayServer.window_set_size(Vector2i(1600, 900))
-		6: DisplayServer.window_set_size(Vector2i(1366, 768))
-		7: DisplayServer.window_set_size(Vector2i(800, 600))
-		8: DisplayServer.window_set_size(Vector2i(640, 480))
+	# delete settings.json and save settings
+	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
+		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
+			# it's possible that the file was opened earlier in the code
+			print("settings.json couldn't be deleted. Exiting...")
+			get_tree().quit(1)
+		
+	var file_contents = \
+		'{\n' + \
+			'\t"resolution":"%s"\n' % GlobalEnums.DisplaySettingsID.keys()[current_resolution] + \
+		'}'	
+	print("to write:\n" + file_contents)
+	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
+	file.store_string(file_contents)
+
+
+## _change_resolution() sets the window size to a given DisplaySettingsID and centers it.
+func _change_resolution(new_res: GlobalEnums.DisplaySettingsID) -> void:
 	
-	# center the window after changing resolution
-	var center_position = DisplayServer.screen_get_position() + (DisplayServer.screen_get_size() / 2)
-	var window_size = get_window().get_size_with_decorations()
+	new_resolution = new_res
+	
+	match new_res:
+		GlobalEnums.DisplaySettingsID._3840x2160: DisplayServer.window_set_size(Vector2i(3840, 2160))
+		GlobalEnums.DisplaySettingsID._2560x1600: DisplayServer.window_set_size(Vector2i(2560, 1600))
+		GlobalEnums.DisplaySettingsID._2560x1440: DisplayServer.window_set_size(Vector2i(2560, 1440))
+		GlobalEnums.DisplaySettingsID._1920x1200: DisplayServer.window_set_size(Vector2i(1920, 1200))
+		GlobalEnums.DisplaySettingsID._1920x1080: DisplayServer.window_set_size(Vector2i(1920, 1080))
+		GlobalEnums.DisplaySettingsID._1600x900:  DisplayServer.window_set_size(Vector2i(1600, 900))
+		GlobalEnums.DisplaySettingsID._1366x768:  DisplayServer.window_set_size(Vector2i(1366, 768))
+		GlobalEnums.DisplaySettingsID._800x600:   DisplayServer.window_set_size(Vector2i(800, 600))
+		GlobalEnums.DisplaySettingsID._640x480:   DisplayServer.window_set_size(Vector2i(640, 480))
+		
+	_center_window()
+
+
+## _center_window() centers the game window by finding the middle position of the monitor,
+## subtracting half the window size, and setting the window's position to the difference.
+func _center_window() -> void:
+	var center_position : Vector2i = DisplayServer.screen_get_position() + (DisplayServer.screen_get_size() / 2)
+	var window_size : Vector2i = get_window().get_size_with_decorations()
 	get_window().set_position(center_position - (window_size / 2))
 	
-	prompt_timer = get_tree().create_timer(15)
-	display_prompt.visible = true
-	await _confirm_resolution_change()
-	print("After it all")
-
+	
 #region Signals
+## Changes the resolution and opens a display prompt
+func _on_option_button_item_selected(index: int) -> void:
+	_change_resolution(GlobalEnums.int_to_display_settings_id(index))
+	await _confirm_resolution_change()
+	
+	
 func _on_save_changes_button_pressed() -> void:
 	GlobalEvents.SettingsSaveChangesPressed.emit()
+	_save_settings()
 	settings.visible = false
 
 
 func _on_cancel_button_pressed() -> void:
+	
+	# undo all changes
+	if current_resolution != resolution_setting:
+		current_resolution = resolution_setting
+		new_resolution = resolution_setting
+		_change_resolution(resolution_setting)
+		
 	settings.visible = false
 
 
 #region GlobalEvents
-## on_display_prompt_button_pressed is an event function intended to interrupt
-## confirm_resolution_change. This is until a cleaner way to StopCoroutine() has been found.
+## _on_display_prompt_button_pressed() is an event function intended to interrupt
+## _confirm_resolution_change. This is until a cleaner way to StopCoroutine() has been found.
 func _on_display_prompt_button_pressed() -> void:
 	
 	if not prompt_timer:
@@ -111,16 +175,34 @@ func _on_display_prompt_button_pressed() -> void:
 	prompt_timer.time_left = 0
 
 
+## _on_display_prompt_responded() is an event function that tracks whether the user responded to the
+## display prompt or not. Currently, the only setting that opens a display prompt is resolution.
 func _on_display_prompt_responded(response : bool) -> void:
-	print("on_display_prompt_responded" + str(response))
+	
+	if not settings.visible: # if the settings menu isn't visible
+		return
+
+	if response: # if user accepts the resolution setting
+		current_resolution = new_resolution
+	else: # if user declines to keep the setting, or lets time run out
+		new_resolution = current_resolution
+		resolution_options.selected = current_resolution
+		_change_resolution(current_resolution)
+		display_prompt.visible = false
 #endregion
 #endregion
 
+
+## _confirm_resolution_change() is called when a user selects a new resolution option in the
+## settings. It reveals a display prompt, asking the user to confirm to keep the changes, or not. If
+## the user doesn't respond after 15 seconds, it will revert to the previous resolution.
 func _confirm_resolution_change() -> void:
 	
+	prompt_timer = get_tree().create_timer(15)
+	display_prompt.visible = true
+	
 	while prompt_timer.time_left > 0:
-		display_prompt.prompt_text.text = "Would you like to keep these settings? (%s)" % str(int(prompt_timer.time_left))
-		print(prompt_timer.time_left)
+		display_prompt.prompt_text.text = "Would you like to keep these settings? (%s)" % str(ceili(prompt_timer.time_left))
 		await get_tree().create_timer(.1).timeout
 	
 	if not player_responded_to_prompt:

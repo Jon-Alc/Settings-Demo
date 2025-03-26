@@ -6,5 +6,5 @@ const SAVE_PATH : String = "user://"
 const SETTINGS_FILE_PATH : String = "user://settings/settings.json"
 const DEFAULT_SETTINGS_FILE_CONTENTS : String = \
 	'{\n' + \
-		'\t"resolution": "1366x768"\n' + \
+		'\t"resolution": "_1366x768"\n' + \
 	'}\n'
