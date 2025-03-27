@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://ep3osnqcyn3a"]
+
+[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="1_khowy"]
+[ext_resource type="StyleBox" uid="uid://c1j3tmqpvbp7l" path="res://ui/themes/settings/reset_button/reset_button_hover.tres" id="2_khowy"]
+[ext_resource type="StyleBox" uid="uid://crddiit76mp0y" path="res://ui/themes/settings/reset_button/reset_button_normal.tres" id="3_u70tq"]
+[ext_resource type="StyleBox" uid="uid://rifeio1onrxt" path="res://ui/themes/settings/reset_button/reset_button_pressed.tres" id="4_50m88"]
+
+[resource]
+default_font = ExtResource("1_khowy")
+Button/colors/font_focus_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/colors/font_hover_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/colors/font_pressed_color = Color(0.87451, 0.705882, 0.556863, 1)
+Button/fonts/font = ExtResource("1_khowy")
+Button/styles/hover = ExtResource("2_khowy")
+Button/styles/normal = ExtResource("3_u70tq")
+Button/styles/pressed = ExtResource("4_50m88")

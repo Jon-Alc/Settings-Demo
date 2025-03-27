@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://gps0q53nkf22"]
+[gd_scene load_steps=9 format=3 uid="uid://gps0q53nkf22"]
 
 [ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings/settings_outer_panel.tres" id="1_kynh7"]
 [ext_resource type="Script" uid="uid://b4gffn507f1ou" path="res://scripts/components/settings.gd" id="1_x5tc2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="4_mdq1c"]
 [ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="5_3husx"]
 [ext_resource type="PackedScene" uid="uid://bhgjtpy8e5g5f" path="res://nodes/components/display_prompt.tscn" id="6_3husx"]
+[ext_resource type="Theme" uid="uid://ep3osnqcyn3a" path="res://ui/themes/settings/reset_button/reset_button.tres" id="6_c3p1s"]
 [ext_resource type="Theme" uid="uid://owsfyu1qhnrq" path="res://ui/themes/settings/settings_inner_panel.tres" id="6_uieqa"]
 
 [node name="Settings" type="Control"]
@@ -59,15 +60,15 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -242.0
-offset_top = -262.0
+offset_top = -261.0
 offset_right = 242.0
-offset_bottom = -56.0
+offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 0
 columns = 2
 
 [node name="Resolution" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Resolution"]
@@ -115,7 +116,7 @@ custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
 [node name="Fullscreen" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Fullscreen"]
@@ -151,140 +152,89 @@ custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
 [node name="Item5" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item5"]
-custom_minimum_size = Vector2(230, 0)
-layout_mode = 2
-
-[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item5/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 6
-theme = ExtResource("2_kynh7")
-theme_override_font_sizes/font_size = 18
-text = "full screen"
-
-[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item5/HBoxContainer"]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-size_flags_horizontal = 6
-clip_text = true
-selected = 0
-fit_to_longest_item = false
-item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Windowed"
-popup/item_1/id = 1
-popup/item_2/text = "Borderless Windowed"
-popup/item_2/id = 2
 
 [node name="Item6" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item7" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+[node name="MasterVolume" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item7"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/MasterVolume"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item7/HBoxContainer"]
+[node name="MasterVolumeLabel" type="Label" parent="OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
-text = "full screen"
+text = "master vol."
 
-[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item7/HBoxContainer"]
+[node name="MasterVolumeSlider" type="HSlider" parent="OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-size_flags_horizontal = 6
-clip_text = true
-selected = 0
-fit_to_longest_item = false
-item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Windowed"
-popup/item_1/id = 1
-popup/item_2/text = "Borderless Windowed"
-popup/item_2/id = 2
+size_flags_vertical = 4
+value = 75.0
+rounded = true
 
 [node name="Item8" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item9" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+[node name="MusicVolume" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item9"]
-custom_minimum_size = Vector2(230, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/MusicVolume"]
+custom_minimum_size = Vector2(230, 31)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item9/HBoxContainer"]
+[node name="MusicVolumeLabel" type="Label" parent="OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
-text = "full screen"
+text = "music vol."
 
-[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item9/HBoxContainer"]
+[node name="MusicVolumeSlider" type="HSlider" parent="OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-size_flags_horizontal = 6
-clip_text = true
-selected = 0
-fit_to_longest_item = false
-item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Windowed"
-popup/item_1/id = 1
-popup/item_2/text = "Borderless Windowed"
-popup/item_2/id = 2
+size_flags_vertical = 4
+value = 75.0
+rounded = true
 
 [node name="Item10" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item11" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+[node name="SoundVolume" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item11"]
-custom_minimum_size = Vector2(230, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/SoundVolume"]
+custom_minimum_size = Vector2(230, 31)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item11/HBoxContainer"]
+[node name="SoundVolumeLabel" type="Label" parent="OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
-text = "full screen"
+text = "sound vol."
 
-[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item11/HBoxContainer"]
+[node name="SoundVolumeSlider" type="HSlider" parent="OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-size_flags_horizontal = 6
-clip_text = true
-selected = 0
-fit_to_longest_item = false
-item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Windowed"
-popup/item_1/id = 1
-popup/item_2/text = "Borderless Windowed"
-popup/item_2/id = 2
+size_flags_vertical = 4
+value = 75.0
+rounded = true
 
 [node name="Item12" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
@@ -298,15 +248,33 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -137.0
+offset_left = -197.0
 offset_top = -41.0
-offset_right = -23.0
+offset_right = -83.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("4_mdq1c")
 theme_override_font_sizes/font_size = 0
 text = "Save Changes"
+
+[node name="ResetDefaultButton" type="Button" parent="OuterOptionsContainer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -57.0
+offset_top = -41.0
+offset_right = 57.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("6_c3p1s")
+theme_override_font_sizes/font_size = 14
+text = "Reset to Default"
 
 [node name="CancelButton" type="Button" parent="OuterOptionsContainer"]
 unique_name_in_owner = true
@@ -316,9 +284,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 23.0
+offset_left = 83.0
 offset_top = -41.0
-offset_right = 137.0
+offset_right = 197.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
