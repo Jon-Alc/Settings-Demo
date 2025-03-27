@@ -5,6 +5,11 @@ extends Control
 @onready var display_prompt: Control = %DisplayPrompt
 @onready var resolution_options: OptionButton = %ResolutionOptions
 @onready var window_mode_options: OptionButton = %FullscreenOptions
+@onready var master_volume_slider: HSlider = $OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer/MasterVolumeSlider
+@onready var music_volume_slider: HSlider = $OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer/MusicVolumeSlider
+@onready var sound_volume_slider: HSlider = $OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer/SoundVolumeSlider
+
+@onready var sfx_audio_stream: AudioStreamPlayer2D = %SFXAudioStream
 
 var prompt_timer : SceneTreeTimer
 var player_responded_to_prompt : bool
@@ -21,6 +26,21 @@ var new_resolution : GlobalEnums.DisplaySettingsID
 var window_mode_setting : GlobalEnums.WindowModeSettingsID
 ## the window mode currently set while browsing the setting component
 var current_window_mode : GlobalEnums.WindowModeSettingsID
+
+## the master volume level, read from settings.json
+var master_volume_setting : int
+## the master volume level currently set while browsing the setting component
+var current_master_volume : int
+
+## the music volume level, read from settings.json
+var music_volume_setting : int
+## the music volume level currently set while browsing the setting component
+var current_music_volume : int
+
+## the sound volume level, read from settings.json
+var sound_volume_setting : int
+## the sound volume level currently set while browsing the setting component
+var current_sound_volume : int
 #endregion
 
 
@@ -118,7 +138,8 @@ func _on_display_prompt_button_pressed() -> void:
 	
 	if not prompt_timer:
 		return
-		
+	
+	sfx_audio_stream.play()
 	player_responded_to_prompt = true
 	prompt_timer.time_left = 0
 
@@ -165,6 +186,27 @@ func _on_fullscreen_options_item_selected(index: int) -> void:
 #endregion
 
 
+#region Volume sliders feature functions
+#region Signals
+func _on_master_volume_slider_value_changed(value: float) -> void:
+	current_master_volume = int(value)
+	AudioServer.set_bus_volume_linear(GlobalEnums.AudioBusIndex.MASTER, value / 100)
+
+
+
+func _on_music_volume_slider_value_changed(value: float) -> void:
+	current_music_volume = int(value)
+	AudioServer.set_bus_volume_linear(GlobalEnums.AudioBusIndex.MUSIC, value / 100)
+
+
+func _on_sound_volume_slider_value_changed(value: float) -> void:
+	current_sound_volume = int(value)
+	AudioServer.set_bus_volume_linear(GlobalEnums.AudioBusIndex.SFX, value / 100)
+	sfx_audio_stream.play()
+#endregion
+#endregion
+
+
 #region Settings component-specific functions
 ## _read_settings() is called if there is an existing settings.json file. It parses the settings
 ## file and sets the game's current settings. If the file can't be read, it deletes this file and
@@ -187,6 +229,9 @@ func _read_settings() -> void:
 	var settings_dict : Dictionary = JSON.parse_string(settings_string)
 	var resolution_value : String = settings_dict["resolution"]
 	var window_mode_value : String = settings_dict["window_mode"]
+	var master_volume_value : int = settings_dict["master_volume"]
+	var music_volume_value : int = settings_dict["music_volume"]
+	var sound_volume_value : int = settings_dict["sound_volume"]
 	
 	resolution_setting = GlobalEnums.str_to_display_settings_id(resolution_value)
 	current_resolution = resolution_setting
@@ -195,7 +240,18 @@ func _read_settings() -> void:
 	window_mode_setting = GlobalEnums.str_to_window_mode_settings_id(window_mode_value)
 	current_window_mode = window_mode_setting
 	window_mode_options.selected = window_mode_setting
-
+	
+	master_volume_setting = master_volume_value
+	current_master_volume = master_volume_value
+	master_volume_slider.value = current_master_volume
+	
+	music_volume_setting = music_volume_value
+	current_music_volume = music_volume_value
+	music_volume_slider.value = current_music_volume
+	
+	sound_volume_setting = sound_volume_value
+	current_sound_volume = sound_volume_value
+	sound_volume_slider.value = current_sound_volume
 
 ## _initialize_settings() is called if there is no settings.json file, or it can't be read. It
 ## creates a new settings.json file in the AppData folder, and initializes default settings.
@@ -224,6 +280,9 @@ func _save_settings():
 	
 	resolution_setting = current_resolution
 	window_mode_setting = current_window_mode
+	master_volume_setting = current_master_volume
+	music_volume_setting = current_music_volume
+	sound_volume_setting = current_sound_volume
 	
 	# ensure folder exists--make_dir() doesn't do anything if the folder already exists
 	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
@@ -239,7 +298,10 @@ func _save_settings():
 	var file_contents = \
 		'{\n' + \
 			'\t"resolution":"%s",\n' % GlobalEnums.DisplaySettingsID.keys()[resolution_setting] + \
-			'\t"window_mode":"%s"\n' % GlobalEnums.WindowModeSettingsID.keys()[window_mode_setting] + \
+			'\t"window_mode":"%s",\n' % GlobalEnums.WindowModeSettingsID.keys()[window_mode_setting] + \
+			'\t"master_volume":%d,\n' % master_volume_setting + \
+			'\t"music_volume":%d,\n' % music_volume_setting + \
+			'\t"sound_volume":%d\n' % sound_volume_setting + \
 		'}'	
 	print("to write:\n" + file_contents)
 	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
@@ -248,6 +310,7 @@ func _save_settings():
 
 #region Signals
 func _on_save_changes_button_pressed() -> void:
+	sfx_audio_stream.play()
 	GlobalEvents.SettingsSaveChangesPressed.emit()
 	_save_settings()
 	settings.visible = false
@@ -256,15 +319,30 @@ func _on_save_changes_button_pressed() -> void:
 ## Reverts all settings to the settings.json file
 func _on_cancel_button_pressed() -> void:
 	
+	sfx_audio_stream.play()
+	
 	# undo all changes
 	if current_resolution != resolution_setting:
 		current_resolution = resolution_setting
 		resolution_options.selected = resolution_setting
 		_change_resolution(resolution_setting)
+		
 	if current_window_mode != window_mode_setting:
 		current_window_mode = window_mode_setting
 		window_mode_options.selected = window_mode_setting
 		_change_window_mode(window_mode_setting)
+		
+	if current_master_volume != master_volume_setting:
+		current_master_volume = master_volume_setting
+		master_volume_slider.value = master_volume_setting
+		
+	if current_music_volume != music_volume_setting:
+		current_music_volume = music_volume_setting
+		music_volume_slider.value = music_volume_setting
+		
+	if current_sound_volume != sound_volume_setting:
+		current_sound_volume = sound_volume_setting
+		sound_volume_slider.value = sound_volume_setting
 		
 	settings.visible = false
 #endregion

@@ -88,6 +88,12 @@ func str_to_window_mode_settings_id(value: String) -> WindowModeSettingsID:
 	return key
 
 
+enum AudioBusIndex {
+	MASTER = 0,
+	MUSIC = 1,
+	SFX = 2,
+	NULL = -1
+}
 # could add shortcut consts
 #const NULL = MainMenuButtonID.NULL
 #const CONTINUE = MainMenuButtonID.CONTINUE

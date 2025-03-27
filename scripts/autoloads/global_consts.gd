@@ -7,5 +7,8 @@ const SETTINGS_FILE_PATH : String = "user://settings/settings.json"
 const DEFAULT_SETTINGS_FILE_CONTENTS : String = \
 	'{\n' + \
 		'\t"resolution": "_1366x768",\n' + \
-		'\t"window_mode": "WINDOWED"\n' + \
+		'\t"window_mode": "WINDOWED",\n' + \
+		'\t"master_volume": 75,\n' + \
+		'\t"music_volume": 75,\n' + \
+		'\t"sound_volume": 75\n' + \
 	'}\n'
