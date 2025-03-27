@@ -114,38 +114,37 @@ popup/item_8/id = 8
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="Item3" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+[node name="Fullscreen" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Item3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Fullscreen"]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
-[node name="FullScreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Item3/HBoxContainer"]
+[node name="FullscreenLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Fullscreen/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
-text = "full screen"
+text = "fullscreen"
 
-[node name="OptionButton" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Item3/HBoxContainer"]
+[node name="FullscreenOptions" type="OptionButton" parent="OuterOptionsContainer/GridContainer/Fullscreen/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 clip_text = true
 selected = 1
 fit_to_longest_item = false
-item_count = 4
+item_count = 3
 popup/item_0/text = "Fullscreen"
 popup/item_0/id = 0
 popup/item_1/text = "Windowed"
 popup/item_1/id = 1
-popup/item_2/text = "Borderless Fullscreen"
+popup/item_2/text = "Borderless Windowed"
 popup/item_2/id = 2
-popup/item_3/text = "Borderless Windowed"
-popup/item_3/id = 3
 
 [node name="Item4" type="Control" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 0)
@@ -332,6 +331,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Resolution/HBoxContainer/ResolutionOptions" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Resolution/HBoxContainer/ResolutionOptions" to="." method="_on_resolution_option_item_selected"]
+[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Fullscreen/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
 [connection signal="pressed" from="OuterOptionsContainer/SaveChangesButton" to="." method="_on_save_changes_button_pressed"]
 [connection signal="pressed" from="OuterOptionsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

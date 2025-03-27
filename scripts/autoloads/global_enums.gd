@@ -60,8 +60,7 @@ func str_to_display_settings_id(value: String) -> DisplaySettingsID:
 enum WindowModeSettingsID {
 	FULLSCREEN = 0,
 	WINDOWED = 1,
-	BORDERLESS_FULLSCREEN = 2,
-	BORDERLESS_WINDOWED = 3,
+	BORDERLESS_WINDOWED = 2,
 	NULL = -1
 }
 
@@ -72,8 +71,7 @@ func int_to_window_mode_settings_id(value: int) -> WindowModeSettingsID:
 	match value:
 		0: key = WindowModeSettingsID.FULLSCREEN
 		1: key = WindowModeSettingsID.WINDOWED
-		2: key = WindowModeSettingsID.BORDERLESS_FULLSCREEN
-		3: key = WindowModeSettingsID.WINDOWED
+		2: key = WindowModeSettingsID.BORDERLESS_WINDOWED
 	
 	return key
 
@@ -85,8 +83,7 @@ func str_to_window_mode_settings_id(value: String) -> WindowModeSettingsID:
 	match value:
 		"FULLSCREEN": key = WindowModeSettingsID.FULLSCREEN
 		"WINDOWED": key = WindowModeSettingsID.WINDOWED
-		"BORDERLESS_FULLSCREEN": WindowModeSettingsID.BORDERLESS_FULLSCREEN
-		"BORDERLESS_WINDOWED": WindowModeSettingsID.WINDOWED
+		"BORDERLESS_WINDOWED": key = WindowModeSettingsID.BORDERLESS_WINDOWED
 	
 	return key
 
