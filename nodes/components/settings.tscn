@@ -305,4 +305,5 @@ layout_mode = 1
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer/MusicVolumeSlider" to="." method="_on_music_volume_slider_value_changed"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer/SoundVolumeSlider" to="." method="_on_sound_volume_slider_value_changed"]
 [connection signal="pressed" from="OuterOptionsContainer/SaveChangesButton" to="." method="_on_save_changes_button_pressed"]
+[connection signal="pressed" from="OuterOptionsContainer/ResetDefaultButton" to="." method="_on_reset_default_button_pressed"]
 [connection signal="pressed" from="OuterOptionsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

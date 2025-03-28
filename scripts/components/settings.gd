@@ -47,14 +47,11 @@ var current_sound_volume : int
 #region _ready() functions
 func _ready() -> void:
 	_initialize()
-	GlobalEvents.DisplayPromptButtonPressed.connect(_on_display_prompt_button_pressed)
-	GlobalEvents.DisplayPromptResponded.connect(_on_display_prompt_responded)
 
 
 ## _initialize() initializes settings variables. It reads them from an existing settings.json file,
 ## or creates a new one if one isn't found.
 func _initialize() -> void:
-	_reset_prompt_variables()
 	
 	if not FileAccess.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
 		print("No settings.json found, making new one...")
@@ -97,67 +94,21 @@ func _center_window() -> void:
 func _on_resolution_option_item_selected(index: int) -> void:
 	new_resolution = GlobalEnums.int_to_display_settings_id(index)
 	_change_resolution(new_resolution)
-	await _confirm_in_display_prompt()
+	display_prompt.timed_prompt(
+		"Would you like to keep these settings?", 5, _display_prompt_accept_resolution,
+		_display_prompt_cancel_resolution, _display_prompt_cancel_resolution
+	)
+	# await _confirm_in_display_prompt()
 #endregion
-#endregion
 
+#region Callbacks
+func _display_prompt_accept_resolution() -> void:
+	current_resolution = new_resolution
 
-#region Display Prompt component functions
-## _reset_prompt_variables() is called when the display prompt finishes an action, whether it's the
-## user button press or timeout.
-## The display prompt will only ever appear when a resolution option is selected.
-func _reset_prompt_variables() -> void:
-	print("Resetting prompt variables")
-	prompt_timer = null
-	player_responded_to_prompt = false
-
-
-## _confirm_in_display_prompt() is called when a user selects a new resolution option in the
-## settings. It reveals a display prompt, asking the user to confirm to keep the changes, or not. If
-## the user doesn't respond after 15 seconds, it will revert to the previous resolution.
-func _confirm_in_display_prompt() -> void:
-	
-	prompt_timer = get_tree().create_timer(15)
-	display_prompt.visible = true
-	
-	while prompt_timer.time_left > 0:
-		display_prompt.prompt_text.text = "Would you like to keep these settings? (%s)" % str(ceili(prompt_timer.time_left))
-		await get_tree().create_timer(.1).timeout
-	
-	if not player_responded_to_prompt:
-		GlobalEvents.DisplayPromptResponded.emit(false)
-	
-	_reset_prompt_variables()
-	
-
-#region Signals
-#region GlobalEvents
-## _on_display_prompt_button_pressed() is an event function intended to interrupt
-## _confirm_in_display_prompt. This is until a cleaner way to StopCoroutine() has been found.
-func _on_display_prompt_button_pressed() -> void:
-	
-	if not prompt_timer:
-		return
-	
-	sfx_audio_stream.play()
-	player_responded_to_prompt = true
-	prompt_timer.time_left = 0
-
-
-## _on_display_prompt_responded() is an event function that tracks whether the user responded to the
-## display prompt or not. Currently, the only setting that opens a display prompt is resolution.
-func _on_display_prompt_responded(response : bool) -> void:
-	
-	if not settings.visible: # if the settings menu isn't visible
-		return
-
-	if response: # if user accepts the resolution setting
-		current_resolution = new_resolution
-	else: # if user declines to keep the setting, or lets time run out
-		resolution_options.selected = current_resolution
-		_change_resolution(current_resolution)
-		display_prompt.visible = false
-#endregion
+func _display_prompt_cancel_resolution() -> void:
+	resolution_options.selected = current_resolution
+	_change_resolution(current_resolution)
+	display_prompt.visible = false
 #endregion
 #endregion
 
@@ -253,6 +204,7 @@ func _read_settings() -> void:
 	current_sound_volume = sound_volume_value
 	sound_volume_slider.value = current_sound_volume
 
+
 ## _initialize_settings() is called if there is no settings.json file, or it can't be read. It
 ## creates a new settings.json file in the AppData folder, and initializes default settings.
 func _initialize_settings() -> void:
@@ -309,11 +261,19 @@ func _save_settings():
 
 
 #region Signals
+## Saves all changes from current session to the settings.json file
 func _on_save_changes_button_pressed() -> void:
 	sfx_audio_stream.play()
 	GlobalEvents.SettingsSaveChangesPressed.emit()
 	_save_settings()
 	settings.visible = false
+
+
+## Deletes the settings.json file and re-initializes it
+func _on_reset_default_button_pressed() -> void:
+	sfx_audio_stream.play()
+	display_prompt.prompt("Are you sure you want to reset your settings to the default?",
+	_display_prompt_accept_reset)
 
 
 ## Reverts all settings to the settings.json file
@@ -345,5 +305,11 @@ func _on_cancel_button_pressed() -> void:
 		sound_volume_slider.value = sound_volume_setting
 		
 	settings.visible = false
+#endregion
+
+#region Callbacks
+func _display_prompt_accept_reset():
+	_initialize_settings()
+	_read_settings()
 #endregion
 #endregion

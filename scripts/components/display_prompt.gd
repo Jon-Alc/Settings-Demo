@@ -2,15 +2,81 @@ extends Control
 
 @onready var display_prompt: Control = $"."
 @onready var prompt_text: Label = %PromptText
+@onready var button_sfx: AudioStreamPlayer2D = $ButtonSFX
 
+var accept_callback: Callable
+var cancel_callback: Callable
+var timeout_callback: Callable
+var prompt_timer: SceneTreeTimer
+
+
+## Prompt takes a string and two callbacks for accepting and cancelling. It reveals the Display
+## Prompt component with the string as the prompt. If the user presses the Accept button, it calls
+## the accept callback, and if the user presses the Cancel button, it calls the cancel callback.
+func prompt(text: String, accept_func: Callable=Callable(), cancel_func: Callable=Callable()) -> void:
+	prompt_text.text = text
+	accept_callback = accept_func
+	cancel_callback = cancel_func
+	_show()
+
+## Prompt takes a string, a float, and three callbacks for accepting, cancelling, and timing out.
+## It reveals the Display Prompt component with the string as the prompt, with the timer showing at
+## the end of the prompt. If the user presses the Accept button, it calls the accept callback. If
+## the user presses the Cancel button, it calls the cancel callback. If the user times out, it calls
+## the timeout callback.
+func timed_prompt(text: String, time: float, accept_func: Callable=Callable(),
+	cancel_func: Callable=Callable(), timeout_func: Callable=Callable()) -> void:
+	
+	accept_callback = accept_func
+	cancel_callback = cancel_func
+	timeout_callback = timeout_func
+	await _timed_show(text, timeout_func, time)
+
+
+func _reset_prompt():
+	prompt_text.text = ""
+	prompt_timer = null
+
+
+func _show():
+	display_prompt.visible = true
+
+
+func _timed_show(text: String, timeout_func: Callable, time: float=5) -> void:
+	prompt_timer = get_tree().create_timer(time)
+	display_prompt.visible = true
+	
+	while prompt_timer and prompt_timer.time_left > 0:
+		display_prompt.prompt_text.text = "%s (%s)" % [text, str(ceili(prompt_timer.time_left))]
+		await get_tree().create_timer(.1).timeout
+
+	if not prompt_timer:
+		return
+	
+	_hide()
+		
+	if timeout_func:
+		timeout_func.call()
+		
+
+	
+
+func _hide():
+	display_prompt.visible = false
+	_reset_prompt()
+	
 
 func _on_accept_button_pressed() -> void:
-	GlobalEvents.DisplayPromptButtonPressed.emit()
-	GlobalEvents.DisplayPromptResponded.emit(true)
-	display_prompt.visible = false
+	button_sfx.play()
+	_hide()
+	
+	if accept_callback:
+		accept_callback.call()
 
 
 func _on_cancel_button_pressed() -> void:
-	GlobalEvents.DisplayPromptButtonPressed.emit()
-	GlobalEvents.DisplayPromptResponded.emit(false)
-	display_prompt.visible = false
+	button_sfx.play()
+	_hide()
+	
+	if cancel_callback:
+		cancel_callback.call()

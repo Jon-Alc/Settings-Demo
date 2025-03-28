@@ -33,3 +33,4 @@ bus = &"Music"
 [node name="SFXAudioStream" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("5_4tb2u")
+bus = &"SFX"
