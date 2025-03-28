@@ -95,10 +95,9 @@ func _on_resolution_option_item_selected(index: int) -> void:
 	new_resolution = GlobalEnums.int_to_display_settings_id(index)
 	_change_resolution(new_resolution)
 	display_prompt.timed_prompt(
-		"Would you like to keep these settings?", 5, _display_prompt_accept_resolution,
+		"Would you like to keep these settings?", 15, _display_prompt_accept_resolution,
 		_display_prompt_cancel_resolution, _display_prompt_cancel_resolution
 	)
-	# await _confirm_in_display_prompt()
 #endregion
 
 #region Callbacks
@@ -308,6 +307,7 @@ func _on_cancel_button_pressed() -> void:
 		
 	settings.visible = false
 #endregion
+
 
 #region Callbacks
 ## Called when the user accepts the Display Prompt to reset to default. Deletes the existing
