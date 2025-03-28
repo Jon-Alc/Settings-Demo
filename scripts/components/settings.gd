@@ -102,13 +102,16 @@ func _on_resolution_option_item_selected(index: int) -> void:
 #endregion
 
 #region Callbacks
+## Called when the user accepts the Display Prompt to keep the new resolution.
 func _display_prompt_accept_resolution() -> void:
 	current_resolution = new_resolution
 
+
+## Called when the user cancels the Display Prompt to keep the new resolution. It undoes the
+## selected resolution.
 func _display_prompt_cancel_resolution() -> void:
 	resolution_options.selected = current_resolution
 	_change_resolution(current_resolution)
-	display_prompt.visible = false
 #endregion
 #endregion
 
@@ -142,7 +145,6 @@ func _on_fullscreen_options_item_selected(index: int) -> void:
 func _on_master_volume_slider_value_changed(value: float) -> void:
 	current_master_volume = int(value)
 	AudioServer.set_bus_volume_linear(GlobalEnums.AudioBusIndex.MASTER, value / 100)
-
 
 
 func _on_music_volume_slider_value_changed(value: float) -> void:
@@ -308,6 +310,8 @@ func _on_cancel_button_pressed() -> void:
 #endregion
 
 #region Callbacks
+## Called when the user accepts the Display Prompt to reset to default. Deletes the existing
+## settings.json, re-initializes it, and re-reads it.
 func _display_prompt_accept_reset():
 	_initialize_settings()
 	_read_settings()
