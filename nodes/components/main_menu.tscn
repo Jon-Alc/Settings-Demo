@@ -38,7 +38,6 @@ layout_mode = 1
 offset_right = 77.0
 theme_override_font_sizes/font_size = 18
 text = "continue"
-LABEL_ID = 1
 
 [node name="NewGameLebel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
@@ -51,7 +50,7 @@ offset_bottom = -2.333
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
 text = "new game"
-LABEL_ID = 2
+LABEL_ID = 1
 
 [node name="SettingsLabel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
@@ -64,7 +63,7 @@ offset_bottom = 26.333
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
 text = "settings"
-LABEL_ID = 3
+LABEL_ID = 2
 
 [node name="ExitLabel" parent="MenuContainer/MenuLabels" instance=ExtResource("3_mdgqf")]
 layout_mode = 1
@@ -77,4 +76,4 @@ offset_bottom = 0.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 18
 text = "exit"
-LABEL_ID = 4
+LABEL_ID = 3

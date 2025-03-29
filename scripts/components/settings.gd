@@ -5,14 +5,13 @@ extends Control
 @onready var display_prompt: Control = %DisplayPrompt
 @onready var resolution_options: OptionButton = %ResolutionOptions
 @onready var window_mode_options: OptionButton = %FullscreenOptions
-@onready var master_volume_slider: HSlider = $OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer/MasterVolumeSlider
-@onready var music_volume_slider: HSlider = $OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer/MusicVolumeSlider
-@onready var sound_volume_slider: HSlider = $OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer/SoundVolumeSlider
-
+@onready var framerate_spin_box: SpinBox = %FramerateSpinBox
+@onready var vsync_options: OptionButton = %VSyncOptions
+@onready var background_check_box: CheckBox = %BackgroundCheckBox
+@onready var master_volume_slider: HSlider = %MasterVolumeSlider
+@onready var music_volume_slider: HSlider = %MusicVolumeSlider
+@onready var sound_volume_slider: HSlider = %SoundVolumeSlider
 @onready var sfx_audio_stream: AudioStreamPlayer2D = %SFXAudioStream
-
-var prompt_timer : SceneTreeTimer
-var player_responded_to_prompt : bool
 
 ## the resolution of the game, read from settings.json
 var resolution_setting : GlobalEnums.DisplaySettingsID
@@ -24,22 +23,37 @@ var new_resolution : GlobalEnums.DisplaySettingsID
 
 ## the window mode of the game, read from settings.json
 var window_mode_setting : GlobalEnums.WindowModeSettingsID
-## the window mode currently set while browsing the setting component
+## the window mode currently set while browsing the settings component
 var current_window_mode : GlobalEnums.WindowModeSettingsID
+
+## the max framerate of the game, read from settings.json
+var max_framerate_setting : int
+## the max framerate currently set while browsing the settings component
+var current_max_framerate : int
+
+## the vsync setting of the game, read from settings.json
+var vsync_setting : GlobalEnums.VSyncSettingsID
+## the vsync setting currently set while browsing the settings component
+var current_vsync : GlobalEnums.VSyncSettingsID
+
+## the play-in-background setting of the game, read from settings.json
+var play_in_bg_setting : bool
+## the play-in-background setting currently set while browsing the settings component
+var current_play_in_bg : bool
 
 ## the master volume level, read from settings.json
 var master_volume_setting : int
-## the master volume level currently set while browsing the setting component
+## the master volume level currently set while browsing the settings component
 var current_master_volume : int
 
 ## the music volume level, read from settings.json
 var music_volume_setting : int
-## the music volume level currently set while browsing the setting component
+## the music volume level currently set while browsing the settings component
 var current_music_volume : int
 
 ## the sound volume level, read from settings.json
 var sound_volume_setting : int
-## the sound volume level currently set while browsing the setting component
+## the sound volume level currently set while browsing the settings component
 var current_sound_volume : int
 #endregion
 
@@ -139,6 +153,38 @@ func _on_fullscreen_options_item_selected(index: int) -> void:
 #endregion
 
 
+#region Max framerate feature functions
+func _get_current_framerate() -> int:
+	return framerate_spin_box.value
+#endregion
+
+
+#region VSync feature functions
+## _change_vsync_mode() changes the VSync setting depending on which setting was chosen.
+func _change_vsync_mode(new_vsync: GlobalEnums.VSyncSettingsID) -> void:
+	
+	match new_vsync:
+		GlobalEnums.VSyncSettingsID.OFF: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+		GlobalEnums.VSyncSettingsID.ON: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+		GlobalEnums.VSyncSettingsID.ADAPTIVE: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
+
+
+#region Signals
+func _on_vsync_options_item_selected(index: int) -> void:
+	current_vsync = GlobalEnums.int_to_vsync_settings_id(index)
+	_change_vsync_mode(current_vsync)
+#endregion
+#endregion
+
+
+#region Play in Background feature functions
+#region Signals
+func _on_background_check_box_toggled(toggled_on: bool) -> void:
+	current_play_in_bg = toggled_on
+#endregion
+#endregion
+
+
 #region Volume sliders feature functions
 #region Signals
 func _on_master_volume_slider_value_changed(value: float) -> void:
@@ -168,7 +214,7 @@ func _read_settings() -> void:
 	var settings_string : String = readfile.get_as_text()
 	print(settings_string)
 	
-	var value = JSON.parse_string(settings_string)
+	var value : Variant = JSON.parse_string(settings_string)
 	
 	# if settings.json couldn't be read
 	if not value:
@@ -181,6 +227,9 @@ func _read_settings() -> void:
 	var settings_dict : Dictionary = JSON.parse_string(settings_string)
 	var resolution_value : String = settings_dict["resolution"]
 	var window_mode_value : String = settings_dict["window_mode"]
+	var max_framerate_value : int = settings_dict["framerate"]
+	var vsync_value : String = settings_dict["vsync"]
+	var play_in_bg_value : bool = bool(settings_dict["background"])
 	var master_volume_value : int = settings_dict["master_volume"]
 	var music_volume_value : int = settings_dict["music_volume"]
 	var sound_volume_value : int = settings_dict["sound_volume"]
@@ -192,6 +241,18 @@ func _read_settings() -> void:
 	window_mode_setting = GlobalEnums.str_to_window_mode_settings_id(window_mode_value)
 	current_window_mode = window_mode_setting
 	window_mode_options.selected = window_mode_setting
+	
+	max_framerate_setting = max_framerate_value
+	current_max_framerate = max_framerate_value
+	framerate_spin_box.value = current_max_framerate
+	
+	vsync_setting = GlobalEnums.str_to_vsync_settings_id(vsync_value)
+	current_vsync = vsync_setting
+	vsync_options.selected = vsync_setting
+	
+	play_in_bg_setting = play_in_bg_value
+	current_play_in_bg = play_in_bg_value
+	background_check_box.button_pressed = play_in_bg_value
 	
 	master_volume_setting = master_volume_value
 	current_master_volume = master_volume_value
@@ -229,10 +290,13 @@ func _initialize_settings() -> void:
 ## _save_settings() takes the current settings session's variables and "overwrites" the settings
 ## file by deleting it and creating it. It also updates the cached settings variables for this
 ## session.
-func _save_settings():
+func _save_settings() -> void:
 	
 	resolution_setting = current_resolution
 	window_mode_setting = current_window_mode
+	max_framerate_setting = _get_current_framerate()
+	vsync_setting = current_vsync
+	play_in_bg_setting = current_play_in_bg
 	master_volume_setting = current_master_volume
 	music_volume_setting = current_music_volume
 	sound_volume_setting = current_sound_volume
@@ -248,13 +312,16 @@ func _save_settings():
 			print("settings.json couldn't be deleted. Exiting...")
 			get_tree().quit(1)
 		
-	var file_contents = \
+	var file_contents : String = \
 		'{\n' + \
-			'\t"resolution":"%s",\n' % GlobalEnums.DisplaySettingsID.keys()[resolution_setting] + \
-			'\t"window_mode":"%s",\n' % GlobalEnums.WindowModeSettingsID.keys()[window_mode_setting] + \
-			'\t"master_volume":%d,\n' % master_volume_setting + \
-			'\t"music_volume":%d,\n' % music_volume_setting + \
-			'\t"sound_volume":%d\n' % sound_volume_setting + \
+			'\t"resolution": "%s",\n' % GlobalEnums.DisplaySettingsID.keys()[resolution_setting] + \
+			'\t"window_mode": "%s",\n' % GlobalEnums.WindowModeSettingsID.keys()[window_mode_setting] + \
+			'\t"framerate": %d,\n' % max_framerate_setting + \
+			'\t"vsync": "%s",\n' % GlobalEnums.VSyncSettingsID.keys()[vsync_setting] + \
+			'\t"background": %d,\n' % int(play_in_bg_setting) + \
+			'\t"master_volume": %d,\n' % master_volume_setting + \
+			'\t"music_volume": %d,\n' % music_volume_setting + \
+			'\t"sound_volume": %d\n' % sound_volume_setting + \
 		'}'	
 	print("to write:\n" + file_contents)
 	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
@@ -267,6 +334,7 @@ func _on_save_changes_button_pressed() -> void:
 	sfx_audio_stream.play()
 	GlobalEvents.SettingsSaveChangesPressed.emit()
 	_save_settings()
+	Engine.max_fps = framerate_spin_box.value
 	settings.visible = false
 
 
@@ -287,24 +355,38 @@ func _on_cancel_button_pressed() -> void:
 		current_resolution = resolution_setting
 		resolution_options.selected = resolution_setting
 		_change_resolution(resolution_setting)
-		
+	
 	if current_window_mode != window_mode_setting:
 		current_window_mode = window_mode_setting
 		window_mode_options.selected = window_mode_setting
 		_change_window_mode(window_mode_setting)
-		
+	
+	if current_max_framerate != max_framerate_setting:
+		current_max_framerate = max_framerate_setting
+		framerate_spin_box.value = max_framerate_setting
+		# don't have to change framerate, as it's only applied when saving settings
+	
+	if current_vsync != vsync_setting:
+		current_vsync = vsync_setting
+		vsync_options.selected = vsync_setting
+		_change_vsync_mode(vsync_setting)
+	
+	if current_play_in_bg != play_in_bg_setting:
+		current_play_in_bg = play_in_bg_setting
+		# don't have to change anything; only if the game loses focus
+	
 	if current_master_volume != master_volume_setting:
 		current_master_volume = master_volume_setting
 		master_volume_slider.value = master_volume_setting
-		
+	
 	if current_music_volume != music_volume_setting:
 		current_music_volume = music_volume_setting
 		music_volume_slider.value = music_volume_setting
-		
+	
 	if current_sound_volume != sound_volume_setting:
 		current_sound_volume = sound_volume_setting
 		sound_volume_slider.value = sound_volume_setting
-		
+	
 	settings.visible = false
 #endregion
 
@@ -312,7 +394,7 @@ func _on_cancel_button_pressed() -> void:
 #region Callbacks
 ## Called when the user accepts the Display Prompt to reset to default. Deletes the existing
 ## settings.json, re-initializes it, and re-reads it.
-func _display_prompt_accept_reset():
+func _display_prompt_accept_reset() -> void:
 	_initialize_settings()
 	_read_settings()
 #endregion

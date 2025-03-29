@@ -1,12 +1,13 @@
 extends Node
 
 enum MainMenuButtonID {
-	NULL,
 	CONTINUE,
 	NEW_GAME,
 	SETTINGS,
-	EXIT
+	EXIT,
+	NULL
 }
+
 
 enum DisplaySettingsID {
 	_640x480 = 0,
@@ -20,6 +21,7 @@ enum DisplaySettingsID {
 	_3840x2160 = 8,
 	NULL = -1
 }
+
 
 func int_to_display_settings_id(value: int) -> DisplaySettingsID:
 	
@@ -64,9 +66,10 @@ enum WindowModeSettingsID {
 	NULL = -1
 }
 
+
 func int_to_window_mode_settings_id(value: int) -> WindowModeSettingsID:
 	
-	var key = WindowModeSettingsID.NULL
+	var key : WindowModeSettingsID = WindowModeSettingsID.NULL
 	
 	match value:
 		0: key = WindowModeSettingsID.FULLSCREEN
@@ -78,7 +81,7 @@ func int_to_window_mode_settings_id(value: int) -> WindowModeSettingsID:
 
 func str_to_window_mode_settings_id(value: String) -> WindowModeSettingsID:
 	
-	var key = WindowModeSettingsID.NULL
+	var key : WindowModeSettingsID = WindowModeSettingsID.NULL
 	
 	match value:
 		"FULLSCREEN": key = WindowModeSettingsID.FULLSCREEN
@@ -88,12 +91,45 @@ func str_to_window_mode_settings_id(value: String) -> WindowModeSettingsID:
 	return key
 
 
+enum VSyncSettingsID {
+	OFF = 0,
+	ON = 1,
+	ADAPTIVE = 2,
+	NULL = -1
+}
+
+
+func int_to_vsync_settings_id(value: int) -> VSyncSettingsID:
+	
+	var key : VSyncSettingsID = VSyncSettingsID.NULL
+	
+	match value:
+		0: key = VSyncSettingsID.OFF
+		1: key = VSyncSettingsID.ON
+		2: key = VSyncSettingsID.ADAPTIVE
+		
+	return key
+
+
+func str_to_vsync_settings_id(value: String) -> VSyncSettingsID:
+	
+	var key : VSyncSettingsID = VSyncSettingsID.NULL
+	
+	match value:
+		"OFF": key = VSyncSettingsID.OFF
+		"ON": key = VSyncSettingsID.ON
+		"ADAPTIVE": key = VSyncSettingsID.ADAPTIVE
+		
+	return key
+
+
 enum AudioBusIndex {
 	MASTER = 0,
 	MUSIC = 1,
 	SFX = 2,
 	NULL = -1
 }
+
 # could add shortcut consts
 #const NULL = MainMenuButtonID.NULL
 #const CONTINUE = MainMenuButtonID.CONTINUE

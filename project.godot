@@ -21,6 +21,11 @@ GlobalEvents="*res://scripts/autoloads/global_events.gd"
 GlobalEnums="*res://scripts/autoloads/global_enums.gd"
 GlobalConsts="*res://scripts/autoloads/global_consts.gd"
 
+[debug]
+
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/inferred_declaration=2
+
 [display]
 
 window/size/viewport_width=640
@@ -30,7 +35,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

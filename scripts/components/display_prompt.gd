@@ -35,7 +35,7 @@ func timed_prompt(text: String, time: float, accept_func: Callable=Callable(),
 
 
 ## _reset() deletes the text and resets all variables.
-func _reset():
+func _reset() -> void:
 	prompt_text.text = ""
 	accept_callback = Callable()
 	cancel_callback = Callable()
@@ -44,7 +44,7 @@ func _reset():
 
 
 ## _show() reveals the prompt.
-func _show():
+func _show() -> void:
 	display_prompt.visible = true
 
 
@@ -70,7 +70,7 @@ func _timed_show(text: String, timeout_func: Callable, time: float=5) -> void:
 
 
 ## _hide() hides the prompt.
-func _hide():
+func _hide() -> void:
 	display_prompt.visible = false
 	
 

@@ -131,11 +131,12 @@ text = "max framerate"
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 
-[node name="FramerateLineEdit" type="LineEdit" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
+[node name="FramerateSpinBox" type="SpinBox" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "60"
-placeholder_text = "60"
+min_value = 30.0
+max_value = 999.0
+value = 60.0
 
 [node name="FramerateLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(35, 0)
@@ -193,7 +194,8 @@ theme = ExtResource("2_kynh7")
 theme_override_font_sizes/font_size = 18
 text = "vsync"
 
-[node name="FullscreenOptions" type="OptionButton" parent="OuterOptionsContainer/GridContainer/VSync/HBoxContainer"]
+[node name="VSyncOptions" type="OptionButton" parent="OuterOptionsContainer/GridContainer/VSync/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -229,18 +231,11 @@ theme_override_font_sizes/font_size = 11
 text = "    play in
 background"
 
-[node name="FullscreenOptions" type="OptionButton" parent="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer"]
+[node name="BackgroundCheckBox" type="CheckBox" parent="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-size_flags_horizontal = 6
-clip_text = true
-selected = 1
-fit_to_longest_item = false
-item_count = 2
-popup/item_0/text = "Play"
-popup/item_0/id = 0
-popup/item_1/text = "Pause"
-popup/item_1/id = 1
+button_pressed = true
 
 [node name="MasterVolume" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 31)
@@ -259,6 +254,7 @@ theme_override_font_sizes/font_size = 18
 text = "master vol."
 
 [node name="MasterVolumeSlider" type="HSlider" parent="OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_vertical = 4
@@ -286,6 +282,7 @@ theme_override_font_sizes/font_size = 18
 text = "music vol."
 
 [node name="MusicVolumeSlider" type="HSlider" parent="OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_vertical = 4
@@ -313,6 +310,7 @@ theme_override_font_sizes/font_size = 18
 text = "sound vol."
 
 [node name="SoundVolumeSlider" type="HSlider" parent="OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_vertical = 4
@@ -384,8 +382,8 @@ layout_mode = 1
 
 [connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Resolution/HBoxContainer/ResolutionOptions" to="." method="_on_resolution_option_item_selected"]
 [connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Fullscreen/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
-[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/VSync/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
-[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
+[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/VSync/HBoxContainer/VSyncOptions" to="." method="_on_vsync_options_item_selected"]
+[connection signal="toggled" from="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer/BackgroundCheckBox" to="." method="_on_background_check_box_toggled"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer/MasterVolumeSlider" to="." method="_on_master_volume_slider_value_changed"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer/MusicVolumeSlider" to="." method="_on_music_volume_slider_value_changed"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer/SoundVolumeSlider" to="." method="_on_sound_volume_slider_value_changed"]
