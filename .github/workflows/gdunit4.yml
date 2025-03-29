@@ -43,6 +43,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      pull-requests: write
+      statuses: write
     steps:
       - uses: actions/checkout@v4
       - uses: MikeSchulze/gdunit4-action@v1
