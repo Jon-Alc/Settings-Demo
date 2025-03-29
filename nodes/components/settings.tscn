@@ -111,9 +111,39 @@ popup/item_7/id = 7
 popup/item_8/text = "3840x2160"
 popup/item_8/id = 8
 
-[node name="Item2" type="Control" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+[node name="Framerate" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Framerate"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="FramerateLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme = ExtResource("2_kynh7")
+theme_override_font_sizes/font_size = 14
+text = "max framerate"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="FramerateLineEdit" type="LineEdit" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "60"
+placeholder_text = "60"
+
+[node name="FramerateLabel" type="Label" parent="OuterOptionsContainer/GridContainer/Framerate/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme = ExtResource("2_kynh7")
+theme_override_font_sizes/font_size = 18
+text = "FPS"
 
 [node name="Fullscreen" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 31)
@@ -147,17 +177,70 @@ popup/item_1/id = 1
 popup/item_2/text = "Borderless Windowed"
 popup/item_2/id = 2
 
-[node name="Item4" type="Control" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+[node name="VSync" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/VSync"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="VSyncLabel" type="Label" parent="OuterOptionsContainer/GridContainer/VSync/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme = ExtResource("2_kynh7")
+theme_override_font_sizes/font_size = 18
+text = "vsync"
+
+[node name="FullscreenOptions" type="OptionButton" parent="OuterOptionsContainer/GridContainer/VSync/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+clip_text = true
+selected = 1
+fit_to_longest_item = false
+item_count = 3
+popup/item_0/text = "Off"
+popup/item_0/id = 0
+popup/item_1/text = "On"
+popup/item_1/id = 1
+popup/item_2/text = "Adaptive"
+popup/item_2/id = 2
 
 [node name="Item5" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
 
-[node name="Item6" type="Control" parent="OuterOptionsContainer/GridContainer"]
-custom_minimum_size = Vector2(240, 0)
+[node name="BackgroundPlay" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
+custom_minimum_size = Vector2(240, 31)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OuterOptionsContainer/GridContainer/BackgroundPlay"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="BackgroundPlayLabel" type="Label" parent="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme = ExtResource("2_kynh7")
+theme_override_font_sizes/font_size = 11
+text = "    play in
+background"
+
+[node name="FullscreenOptions" type="OptionButton" parent="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+clip_text = true
+selected = 1
+fit_to_longest_item = false
+item_count = 2
+popup/item_0/text = "Play"
+popup/item_0/id = 0
+popup/item_1/text = "Pause"
+popup/item_1/id = 1
 
 [node name="MasterVolume" type="CenterContainer" parent="OuterOptionsContainer/GridContainer"]
 custom_minimum_size = Vector2(240, 31)
@@ -301,6 +384,8 @@ layout_mode = 1
 
 [connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Resolution/HBoxContainer/ResolutionOptions" to="." method="_on_resolution_option_item_selected"]
 [connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Fullscreen/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
+[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/VSync/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
+[connection signal="item_selected" from="OuterOptionsContainer/GridContainer/BackgroundPlay/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/MasterVolume/HBoxContainer/MasterVolumeSlider" to="." method="_on_master_volume_slider_value_changed"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/MusicVolume/HBoxContainer/MusicVolumeSlider" to="." method="_on_music_volume_slider_value_changed"]
 [connection signal="value_changed" from="OuterOptionsContainer/GridContainer/SoundVolume/HBoxContainer/SoundVolumeSlider" to="." method="_on_sound_volume_slider_value_changed"]
