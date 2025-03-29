@@ -15,3 +15,4 @@ const DEFAULT_SETTINGS_FILE_CONTENTS : String = \
 		'\t"music_volume": 75,\n' + \
 		'\t"sound_volume": 75\n' + \
 	'}\n'
+	

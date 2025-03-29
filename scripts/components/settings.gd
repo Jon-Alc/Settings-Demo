@@ -1,3 +1,4 @@
+class_name Settings
 extends Control
 
 #region Variables
@@ -12,6 +13,13 @@ extends Control
 @onready var music_volume_slider: HSlider = %MusicVolumeSlider
 @onready var sound_volume_slider: HSlider = %SoundVolumeSlider
 @onready var sfx_audio_stream: AudioStreamPlayer2D = %SFXAudioStream
+
+## the path of the parent folder to the settings file, saved here for caching and testing
+## in-game, it should be defined to GlobalConsts.SAVE_PATH
+var parent_folder_path: String
+## the path to the settings file, saved here for caching and testing
+## in-game, it should be defined to GlobalConsts.SETTINGS_FILE_PATH
+var settings_file_path: String
 
 ## the resolution of the game, read from settings.json
 var resolution_setting : GlobalEnums.DisplaySettingsID
@@ -58,6 +66,12 @@ var current_sound_volume : int
 #endregion
 
 
+func _init(given_parent_folder_path: String=GlobalConsts.SAVE_PATH,
+given_settings_file_path: String=GlobalConsts.SETTINGS_FILE_PATH) -> void:
+	parent_folder_path = given_parent_folder_path
+	settings_file_path = given_settings_file_path
+
+
 #region _ready() functions
 func _ready() -> void:
 	_initialize()
@@ -67,7 +81,7 @@ func _ready() -> void:
 ## or creates a new one if one isn't found.
 func _initialize() -> void:
 	
-	if not FileAccess.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
+	if not FileAccess.file_exists(settings_file_path):
 		print("No settings.json found, making new one...")
 		_initialize_settings()
 
@@ -210,7 +224,8 @@ func _on_sound_volume_slider_value_changed(value: float) -> void:
 ## file and sets the game's current settings. If the file can't be read, it deletes this file and
 ## creates a new one.
 func _read_settings() -> void:
-	var readfile : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.READ)
+		
+	var readfile : FileAccess = FileAccess.open(settings_file_path, FileAccess.READ)
 	var settings_string : String = readfile.get_as_text()
 	print(settings_string)
 	
@@ -272,18 +287,18 @@ func _read_settings() -> void:
 func _initialize_settings() -> void:
 	
 	# create settings folder and initialize settings.json file
-	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
+	var dir : DirAccess = DirAccess.open(parent_folder_path)
 	dir.make_dir("settings")
 	
 	# delete settings.json and re-initialize
-	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
+	if dir.file_exists(settings_file_path):
 		print("Settings file already exists, re-initializing...")
-		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
+		if dir.remove(settings_file_path) != OK:
 			# it's possible that the file was opened earlier in the code
 			print("settings.json couldn't be deleted. Exiting...")
 			get_tree().quit(1)
 		
-	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
+	var file : FileAccess = FileAccess.open(settings_file_path, FileAccess.WRITE)
 	file.store_string(GlobalConsts.DEFAULT_SETTINGS_FILE_CONTENTS)
 	
 	
@@ -302,12 +317,12 @@ func _save_settings() -> void:
 	sound_volume_setting = current_sound_volume
 	
 	# ensure folder exists--make_dir() doesn't do anything if the folder already exists
-	var dir : DirAccess = DirAccess.open(GlobalConsts.SAVE_PATH)
+	var dir : DirAccess = DirAccess.open(parent_folder_path)
 	dir.make_dir("settings")
 	
 	# delete settings.json and save settings
-	if dir.file_exists(GlobalConsts.SETTINGS_FILE_PATH):
-		if dir.remove(GlobalConsts.SETTINGS_FILE_PATH) != OK:
+	if dir.file_exists(settings_file_path):
+		if dir.remove(settings_file_path) != OK:
 			# it's possible that the file was opened earlier in the code
 			print("settings.json couldn't be deleted. Exiting...")
 			get_tree().quit(1)
@@ -324,7 +339,7 @@ func _save_settings() -> void:
 			'\t"sound_volume": %d\n' % sound_volume_setting + \
 		'}'	
 	print("to write:\n" + file_contents)
-	var file : FileAccess = FileAccess.open(GlobalConsts.SETTINGS_FILE_PATH, FileAccess.WRITE)
+	var file : FileAccess = FileAccess.open(settings_file_path, FileAccess.WRITE)
 	file.store_string(file_contents)
 
 
