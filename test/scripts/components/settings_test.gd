@@ -9,18 +9,26 @@ const __source : String = 'res://scripts/components/settings.gd'
 
 #region Variables
 # Filepaths
-const test_parent_folder_path : String = "res://test/data"
+const test_parent_folder_path : String = "res://test/data" # passed in to settings component
+const test_settings_folder_path : String = "res://test/data/settings"
 const test_settings_file_path : String = "res://test/data/settings/settings.json"
 const test_initialize_exp_path : String = "res://test/data/settings/test__initialize_settings/expected_output.json"
 
 # before()
 var settings : Settings
+var test_dir : DirAccess
 #endregion
 
 
-## before every test, create the Settings object and add the filepaths for the test
+### before any test, create the Settings object and add the filepaths for the test
 func before() -> void:
 	settings = auto_free(Settings.new(test_parent_folder_path, test_settings_file_path))
+	test_dir = DirAccess.open(test_settings_folder_path)
+
+
+### after every test, delete the settings.json generated from the test
+func after_test() -> void:
+	test_dir.remove("settings.json")
 
 
 func test__initialize_settings() -> void:
@@ -30,7 +38,6 @@ func test__initialize_settings() -> void:
 	# Arrange
 	settings._initialize_settings()
 	actual_dict = _get_json_data(test_settings_file_path)
-	print(actual_dict)
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
 

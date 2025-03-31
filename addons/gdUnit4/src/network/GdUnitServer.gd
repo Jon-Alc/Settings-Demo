@@ -31,12 +31,12 @@ func _on_gdunit_runner_stop(client_id: int) -> void:
 		_server.disconnect_client(client_id)
 
 
-func _receive_rpc_data(p_rpc: RPC) -> void:
+func _receive_rpc_data(p_rpc: Variant) -> void:
 	if p_rpc is RPCMessage:
-		var rpc_message: RPCMessage = p_rpc
-		GdUnitSignals.instance().gdunit_message.emit(rpc_message.message())
+		GdUnitSignals.instance().gdunit_message.emit(p_rpc.message())
 		return
 	if p_rpc is RPCGdUnitEvent:
-		var rpc_event: RPCGdUnitEvent = p_rpc
-		GdUnitSignals.instance().gdunit_event.emit(rpc_event.event())
+		GdUnitSignals.instance().gdunit_event.emit(p_rpc.event())
 		return
+	if p_rpc is RPCGdUnitTestSuite:
+		GdUnitSignals.instance().gdunit_add_test_suite.emit(p_rpc.dto())
