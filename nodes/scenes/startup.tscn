@@ -24,6 +24,10 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
+[node name="Settings" parent="Control/Settings" instance=ExtResource("2_wwocq")]
+visible = false
+layout_mode = 1
+
 [node name="MusicAudioStream" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("4_5l68w")

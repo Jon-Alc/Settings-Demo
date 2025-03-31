@@ -1,3 +1,4 @@
+class_name DisplayPrompt
 extends Control
 
 @onready var display_prompt: Control = $"."

@@ -8,44 +8,72 @@ extends GdUnitTestSuite
 const __source : String = 'res://scripts/components/settings.gd'
 
 #region Variables
-# Filepaths
-const test_parent_folder_path : String = "res://test/data" # passed in to settings component
-const test_settings_folder_path : String = "res://test/data/settings"
-const test_settings_file_path : String = "res://test/data/settings/settings.json"
-const test_initialize_exp_path : String = "res://test/data/settings/test__initialize_settings/expected_output.json"
-
 # before()
 var settings : Settings
 var test_dir : DirAccess
+
+var consts : SettingsTestConsts = SettingsTestConsts.new()
+var utilities : SettingsTestUtilities = SettingsTestUtilities.new()
 #endregion
 
 
-### before any test, create the Settings object and add the filepaths for the test
+## before any test, create the Settings object and add the filepaths for the test
 func before() -> void:
-	settings = auto_free(Settings.new(test_parent_folder_path, test_settings_file_path))
-	test_dir = DirAccess.open(test_settings_folder_path)
+	settings = auto_free(Settings.new(consts.test_parent_folder_path, consts.test_settings_file_path))
+	test_dir = DirAccess.open(consts.test_settings_folder_path)
 
 
-### after every test, delete the settings.json generated from the test
+## after every test, delete the settings.json generated from the test
 func after_test() -> void:
 	test_dir.remove("settings.json")
 
 
-func test__initialize_settings() -> void:
-	# Act
-	var expected_dict : Dictionary = _get_json_data(test_initialize_exp_path)
-	var actual_dict : Dictionary
+## after all tests, close/free the DirAccess object
+func after() -> void:
+	test_dir = null
+
+
+func test__open_settings() -> void:
 	# Arrange
+	var runner : GdUnitSceneRunner
+	var settings_label : Label
+	var settings_component : Settings
+	# Act
+	runner = scene_runner(consts.test_settings_scene_path)
+	settings_label = runner.find_child("SettingsLabel")
+	runner.set_mouse_position(settings_label.get_screen_position() + consts.button_offset)
+	await runner.await_input_processed()
+	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	await runner.await_input_processed()
+	settings_component = runner.find_child("Settings")
+	# Assert
+	assert_bool(settings_component.visible)
+
+#region Tests
+## test__initialize_settings() checks if settings.json is created when there is no existing one, and
+## that it matches the json string in the consts autoload.
+func test__initialize_settings() -> void:
+	# Arrange
+	var expected_dict : Dictionary = utilities.get_json_data(consts.test_initialize_exp_path)
+	var actual_dict : Dictionary
+	# Act
 	settings._initialize_settings()
-	actual_dict = _get_json_data(test_settings_file_path)
+	actual_dict = utilities.get_json_data(consts.test_settings_file_path)
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
 
 
-#region Helpers
-func _get_json_data(file_path: String) -> Dictionary:
-	var readfile : FileAccess = FileAccess.open(file_path, FileAccess.READ)
-	var file_contents : String = readfile.get_as_text()
-	var data : Dictionary = JSON.parse_string(file_contents)
-	return data
+#func test__reset_to_default() -> void:
+	## Arrange
+	#var expected_dict : Dictionary = utilities.get_json_data(consts.test_initialize_exp_path)
+	#var dummy_dict : Dictionary = utilities.get_json_data(consts.test_initialize_exp_path)
+	#var actual_dict : Dictionary
+	#var runner : GdUnitSceneRunner
+	#utilities.replace_test_settings_data(consts.test_reset_dummy_path)
+	## Act
+	#runner = scene_runner(consts.test_settings_scene_path)
+	#runner.invoke("on_main_menu_label_clicked", GlobalEnums.MainMenuButtonID.SETTINGS)
+	## Assert
+	#
+
 #endregion
