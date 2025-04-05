@@ -1,13 +1,13 @@
 [gd_scene load_steps=6 format=3 uid="uid://cr06ute6a5g18"]
 
-[ext_resource type="Script" uid="uid://crfl23673fd1c" path="res://scripts/scenes/startup.gd" id="1_u2qqx"]
+[ext_resource type="Script" uid="uid://323iccm18pg2" path="res://scripts/scenes/teststartup.gd" id="1_51mlr"]
 [ext_resource type="PackedScene" uid="uid://whhj017wq32w" path="res://nodes/components/main_menu.tscn" id="2_r4ovf"]
 [ext_resource type="PackedScene" uid="uid://gps0q53nkf22" path="res://nodes/components/settings.tscn" id="3_3n8d8"]
 [ext_resource type="AudioStream" uid="uid://ccbfrauh77d82" path="res://assets/music/sample.wav" id="4_ted1n"]
 [ext_resource type="AudioStream" uid="uid://dnx1l3g7b87oy" path="res://assets/sfx/select.wav" id="5_wkblp"]
 
-[node name="Startup" type="Node2D"]
-script = ExtResource("1_u2qqx")
+[node name="TestStartup" type="Node2D"]
+script = ExtResource("1_51mlr")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

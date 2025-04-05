@@ -9,6 +9,7 @@ const __source : String = 'res://scripts/components/settings.gd'
 
 #region Variables
 # before()
+var runner : GdUnitSceneRunner
 var settings : Settings
 var test_dir : DirAccess
 
@@ -23,9 +24,17 @@ func before() -> void:
 	test_dir = DirAccess.open(consts.test_settings_folder_path)
 
 
+## before every test, reload the scene runner and change the settings.json reference
+func before_test() -> void:
+	runner = scene_runner(consts.test_settings_scene_path)
+	var settings_scene : Settings = runner.invoke("find_child", "Settings")
+	settings_scene.parent_folder_path = consts.test_parent_folder_path
+	settings_scene.settings_file_path = consts.test_settings_file_path
+
+
 ## after every test, delete the settings.json generated from the test
 func after_test() -> void:
-	test_dir.remove("settings.json")
+	pass # test_dir.remove("settings.json")
 
 
 ## after all tests, close/free the DirAccess object
@@ -33,6 +42,8 @@ func after() -> void:
 	test_dir = null
 
 
+#region Tests
+## test__open_settings() checks if the settings menu button opens the settings menu.
 func test__open_settings() -> void:
 	# Arrange
 	var runner : GdUnitSceneRunner
@@ -49,7 +60,7 @@ func test__open_settings() -> void:
 	# Assert
 	assert_bool(settings_component.visible)
 
-#region Tests
+
 ## test__initialize_settings() checks if settings.json is created when there is no existing one, and
 ## that it matches the json string in the consts autoload.
 func test__initialize_settings() -> void:

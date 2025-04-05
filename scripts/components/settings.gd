@@ -12,7 +12,8 @@ extends Control
 @onready var master_volume_slider: HSlider = %MasterVolumeSlider
 @onready var music_volume_slider: HSlider = %MusicVolumeSlider
 @onready var sound_volume_slider: HSlider = %SoundVolumeSlider
-@onready var sfx_audio_stream: AudioStreamPlayer2D = %SFXAudioStream
+
+var sfx_audio_stream: AudioStreamPlayer2D
 
 ## the path of the parent folder to the settings file, saved here for caching and testing
 ## in-game, it should be defined to GlobalConsts.SAVE_PATH
@@ -66,10 +67,17 @@ var current_sound_volume : int
 #endregion
 
 
-func _init(given_parent_folder_path: String=GlobalConsts.SAVE_PATH,
-given_settings_file_path: String=GlobalConsts.SETTINGS_FILE_PATH) -> void:
+## pass_dependencies() is meant to be used after an instance of this is instantiated. It passes the
+## dependencies for this node's script.
+func pass_dependencies(
+	sfx_audio_node: AudioStreamPlayer2D,
+	given_parent_folder_path: String=GlobalConsts.SAVE_PATH,
+	given_settings_file_path: String=GlobalConsts.SETTINGS_FILE_PATH,
+) -> Settings:
+	sfx_audio_stream = sfx_audio_node
 	parent_folder_path = given_parent_folder_path
 	settings_file_path = given_settings_file_path
+	return self
 
 
 #region _ready() functions

@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtr7sdichgyd4"]
+
+[ext_resource type="Script" uid="uid://clha6a3l8e7ws" path="res://scripts/scenes/main_menu_screen.gd" id="1_tmg65"]
+[ext_resource type="AudioStream" uid="uid://ccbfrauh77d82" path="res://assets/music/sample.wav" id="4_0na46"]
+[ext_resource type="AudioStream" uid="uid://dnx1l3g7b87oy" path="res://assets/sfx/select.wav" id="5_wlhqe"]
+
+[node name="MainMenuScreen" type="Node2D" node_paths=PackedStringArray("ui", "music_audio_stream", "sfx_audio_stream")]
+script = ExtResource("1_tmg65")
+ui = NodePath("UI")
+music_audio_stream = NodePath("MusicAudioStream")
+sfx_audio_stream = NodePath("SFXAudioStream")
+
+[node name="UI" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="MusicAudioStream" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_0na46")
+autoplay = true
+bus = &"Music"
+
+[node name="SFXAudioStream" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_wlhqe")
+bus = &"SFX"
