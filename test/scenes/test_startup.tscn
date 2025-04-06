@@ -1,36 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cr06ute6a5g18"]
+[gd_scene load_steps=2 format=3 uid="uid://cumfp8ubouik0"]
 
-[ext_resource type="Script" uid="uid://323iccm18pg2" path="res://scripts/scenes/teststartup.gd" id="1_51mlr"]
-[ext_resource type="PackedScene" uid="uid://whhj017wq32w" path="res://nodes/components/main_menu.tscn" id="2_r4ovf"]
-[ext_resource type="PackedScene" uid="uid://gps0q53nkf22" path="res://nodes/components/settings.tscn" id="3_3n8d8"]
-[ext_resource type="AudioStream" uid="uid://ccbfrauh77d82" path="res://assets/music/sample.wav" id="4_ted1n"]
-[ext_resource type="AudioStream" uid="uid://dnx1l3g7b87oy" path="res://assets/sfx/select.wav" id="5_wkblp"]
+[ext_resource type="Script" uid="uid://b3v2enkeyj73k" path="res://test/scripts/scenes/test_startup.gd" id="1_om211"]
 
 [node name="TestStartup" type="Node2D"]
-script = ExtResource("1_51mlr")
-
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 640.0
-offset_bottom = 360.0
-
-[node name="MainMenu" parent="Control" instance=ExtResource("2_r4ovf")]
-unique_name_in_owner = true
-layout_mode = 1
-
-[node name="Settings" parent="Control" instance=ExtResource("3_3n8d8")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-
-[node name="MusicAudioStream" type="AudioStreamPlayer2D" parent="."]
-unique_name_in_owner = true
-stream = ExtResource("4_ted1n")
-autoplay = true
-bus = &"Music"
-
-[node name="SFXAudioStream" type="AudioStreamPlayer2D" parent="."]
-unique_name_in_owner = true
-stream = ExtResource("5_wkblp")
-bus = &"SFX"
+script = ExtResource("1_om211")

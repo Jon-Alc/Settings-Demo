@@ -22,9 +22,9 @@
 #
 ### before any test, create the Settings object and add the filepaths for the test
 #func before() -> void:
-	#settings = auto_free(Settings.new(consts.test_parent_folder_path, consts.test_settings_file_path))
+	#settings = auto_free(Settings.new(consts.TEST_PARENT_FOLDER_PATH, consts.TEST_SETTINGS_FILE_PATH))
 	#display_prompt = settings.display_prompt
-	#test_dir = DirAccess.open(consts.test_settings_folder_path)
+	#test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 #
 #
 ### after every test, delete the settings.json generated from the test
@@ -53,14 +53,14 @@
 ### - settings._save_settings()
 #func test__resolution_640x480() -> void:
 	## Arrange
-	#var expected_dict : Dictionary = utilities.get_json_data(consts.test_res_640x480_exp_path)
+	#var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RES_640X480_EXP_PATH)
 	#var actual_dict : Dictionary
 	## Act
 	## settings._on_resolution_option_item_selected(GlobalEnums.DisplaySettingsID._640x480)
 	#settings._change_resolution(GlobalEnums.DisplaySettingsID._640x480)
 	#display_prompt._on_accept_button_pressed()
 	#settings._on_save_changes_button_pressed()
-	#actual_dict = utilities.get_json_data(consts.test_settings_file_path)
+	#actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	## Assert
 	#assert_dict(actual_dict).is_equal(expected_dict)
 	#assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(640, 480))
