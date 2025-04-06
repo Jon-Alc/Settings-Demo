@@ -66,4 +66,28 @@
 	#assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(640, 480))
 	#
 	#
+
+#func test__resolution_timeout() -> void:
+	## Arrange
+	#var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_TIMEOUT_EXP_PATH)
+	#var actual_dict : Dictionary
+	#var reset_button : Button = runner.find_child("ResetDefaultButton")
+	#var display_prompt : Control
+	## Act
+	#utilities.replace_test_settings_data(consts.TEST_RESET_TIMEOUT_DUMMY_PATH)
+	#runner.set_mouse_position(settings_label.get_screen_position() + consts.BUTTON_OFFSET)
+	#await runner.await_input_processed()
+	#runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	#await runner.await_input_processed()
+	#runner.set_mouse_position(reset_button.get_screen_position() + consts.BUTTON_OFFSET)
+	#await runner.await_input_processed()
+	#runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	#await runner.await_input_processed()
+	## DisplayPrompt gets instantiated, now find it
+	#display_prompt = runner.find_child("DisplayPrompt")
+	## Assert
+	#assert(display_prompt.visible)
+	#await await_millis(16000)
+	#assert(!display_prompt.visible)
+	#assert_dict(actual_dict).is_equal(expected_dict)
 ##endregion

@@ -35,15 +35,6 @@ func timed_prompt(text: String, time: float, accept_func: Callable=Callable(),
 	await _timed_show(text, timeout_func, time)
 
 
-## _reset() deletes the text and resets all variables.
-func _reset() -> void:
-	prompt_text.text = ""
-	accept_callback = Callable()
-	cancel_callback = Callable()
-	timeout_callback = Callable()
-	prompt_timer = null
-
-
 ## _show() reveals the prompt.
 func _show() -> void:
 	display_prompt.visible = true
@@ -66,13 +57,11 @@ func _timed_show(text: String, timeout_func: Callable, time: float=5) -> void:
 		
 	if timeout_func:
 		timeout_func.call()
-	
-	_reset()
 
 
-## _hide() hides the prompt.
+## _hide() deletes the prompt.
 func _hide() -> void:
-	display_prompt.visible = false
+	queue_free()
 	
 
 #region Signals
@@ -83,8 +72,6 @@ func _on_accept_button_pressed() -> void:
 	
 	if accept_callback:
 		accept_callback.call()
-	
-	_reset()
 
 
 ## Calls the cancel callback
@@ -94,6 +81,4 @@ func _on_cancel_button_pressed() -> void:
 	
 	if cancel_callback:
 		cancel_callback.call()
-	
-	_reset()
 #endregion

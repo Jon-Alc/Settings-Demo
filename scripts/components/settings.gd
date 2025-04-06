@@ -2,8 +2,9 @@ class_name Settings
 extends Control
 
 #region Variables
+@export var display_prompt_component: PackedScene = preload("res://nodes/components/display_prompt.tscn")
+
 @onready var settings: Control = $"."
-@onready var display_prompt: Control = %DisplayPrompt
 @onready var resolution_options: OptionButton = %ResolutionOptions
 @onready var window_mode_options: OptionButton = %FullscreenOptions
 @onready var framerate_spin_box: SpinBox = %FramerateSpinBox
@@ -130,6 +131,8 @@ func _center_window() -> void:
 func _on_resolution_option_item_selected(index: int) -> void:
 	new_resolution = GlobalEnums.int_to_display_settings_id(index)
 	_change_resolution(new_resolution)
+	var display_prompt : Control = display_prompt_component.instantiate()
+	add_child(display_prompt)
 	display_prompt.timed_prompt(
 		"Would you like to keep these settings?", 15, _display_prompt_accept_resolution,
 		_display_prompt_cancel_resolution, _display_prompt_cancel_resolution
@@ -364,6 +367,8 @@ func _on_save_changes_button_pressed() -> void:
 ## Deletes the settings.json file and re-initializes it
 func _on_reset_default_button_pressed() -> void:
 	sfx_audio_stream.play()
+	var display_prompt : Control = display_prompt_component.instantiate()
+	add_child(display_prompt)
 	display_prompt.prompt("Are you sure you want to reset your settings to the default?",
 	_display_prompt_accept_reset)
 

@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://gps0q53nkf22"]
+[gd_scene load_steps=8 format=3 uid="uid://gps0q53nkf22"]
 
 [ext_resource type="Theme" uid="uid://n7wrhx8vdlqp" path="res://ui/themes/settings/settings_outer_panel.tres" id="1_kynh7"]
 [ext_resource type="Script" uid="uid://b4gffn507f1ou" path="res://scripts/components/settings.gd" id="1_x5tc2"]
 [ext_resource type="Theme" uid="uid://bsdwm2mbwpfuu" path="res://ui/themes/default_font.tres" id="2_kynh7"]
 [ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="4_mdq1c"]
 [ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="5_3husx"]
-[ext_resource type="PackedScene" uid="uid://bhgjtpy8e5g5f" path="res://nodes/components/display_prompt.tscn" id="6_3husx"]
 [ext_resource type="Theme" uid="uid://ep3osnqcyn3a" path="res://ui/themes/settings/reset_button/reset_button.tres" id="6_c3p1s"]
 [ext_resource type="Theme" uid="uid://owsfyu1qhnrq" path="res://ui/themes/settings/settings_inner_panel.tres" id="6_uieqa"]
 
@@ -374,11 +373,6 @@ grow_vertical = 0
 theme = ExtResource("5_3husx")
 theme_override_font_sizes/font_size = 16
 text = "Cancel"
-
-[node name="DisplayPrompt" parent="." instance=ExtResource("6_3husx")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
 
 [connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Resolution/HBoxContainer/ResolutionOptions" to="." method="_on_resolution_option_item_selected"]
 [connection signal="item_selected" from="OuterOptionsContainer/GridContainer/Fullscreen/HBoxContainer/FullscreenOptions" to="." method="_on_fullscreen_options_item_selected"]
