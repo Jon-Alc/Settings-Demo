@@ -21,7 +21,10 @@ func pass_dependencies(given_parent_folder_path: String=GlobalConsts.SAVE_PATH,
 given_settings_file_path: String=GlobalConsts.SETTINGS_FILE_PATH) -> MainMenuScreen:
 	main_menu = main_menu_component.instantiate()
 	settings = settings_component.instantiate().pass_dependencies(
-		sfx_audio_stream, given_parent_folder_path, given_settings_file_path)
+		sfx_audio_stream,
+		given_parent_folder_path,
+		given_settings_file_path
+	)
 	settings.visible = false
 	return self
 

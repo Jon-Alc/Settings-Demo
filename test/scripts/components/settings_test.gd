@@ -11,15 +11,16 @@ const __source : String = 'res://scripts/components/settings.gd'
 #region Variables
 var test_dir : DirAccess
 var runner : GdUnitSceneRunner
+var main_menu : Control
 var settings_label : Label
 var settings_component : Control
 
-var consts : SettingsTestConsts = SettingsTestConsts.new()
-var utilities : SettingsTestUtilities = SettingsTestUtilities.new()
+var consts : TestConsts = TestConsts.new()
+var utilities : TestUtilities = TestUtilities.new()
 #endregion
 
 
-## before any test, create the Settings object and add the filepaths for the test
+## before any test, set up DirAccess
 func before() -> void:
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
@@ -31,13 +32,14 @@ func before() -> void:
 func before_test() -> void:
 	test_dir.remove("settings.json")
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
-	settings_label = runner.find_child("SettingsLabel")
+	main_menu = runner.find_child("MainMenu")
+	settings_label = main_menu.find_child("SettingsLabel")
 	settings_component = runner.find_child("Settings")
 
 
 ## after all tests:
 ## - delete the settings.json one last time
-## - close/free the DirAccess object
+## - close/free the DirAccess object	
 func after() -> void:
 	test_dir.remove("settings.json")
 	test_dir = null
@@ -48,12 +50,9 @@ func after() -> void:
 func test__open_settings() -> void:
 	# Arrange
 	# Act
-	runner.set_mouse_position(settings_label.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
+	await move_to_element_and_click(settings_label)
 	# Assert
-	assert_bool(settings_component.visible)
+	assert_that(settings_component.visible).is_equal(true)
 
 
 ## test__initialize_settings() checks if settings.json is created when there is no existing one, and
@@ -80,24 +79,15 @@ func test__reset_to_default() -> void:
 	var accept_button : Button
 	# Act
 	utilities.replace_test_settings_data(consts.TEST_RESET_DUMMY_PATH)
-	runner.set_mouse_position(settings_label.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
-	runner.set_mouse_position(reset_button.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
+	await move_to_element_and_click(settings_label)
+	await move_to_element_and_click(reset_button)
 	# DisplayPrompt gets instantiated, now find it and the accept button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
-	assert(display_prompt.visible)
+	assert_that(display_prompt.visible).is_equal(true)
 	
 	accept_button = display_prompt.find_child("AcceptButton")
-	runner.set_mouse_position(accept_button.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
+	await move_to_element_and_click(accept_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_that(display_prompt).is_null()
@@ -114,26 +104,34 @@ func test__reset_cancel() -> void:
 	var cancel_button : Button
 	# Act
 	utilities.replace_test_settings_data(consts.TEST_RESET_CANCEL_DUMMY_PATH)
-	runner.set_mouse_position(settings_label.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
-	runner.set_mouse_position(reset_button.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
+	await move_to_element_and_click(settings_label)
+	await move_to_element_and_click(reset_button)
 	# DisplayPrompt gets instantiated, now find it and the cancel button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
-	assert(display_prompt.visible)
+	assert_that(display_prompt.visible).is_equal(true)
 
 	cancel_button = display_prompt.find_child("CancelButton")
-	runner.set_mouse_position(cancel_button.get_screen_position() + consts.BUTTON_OFFSET)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
+	await move_to_element_and_click(cancel_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_that(display_prompt).is_null()
 	assert_dict(actual_dict).is_equal(expected_dict)
+
+## TODO: func test__fix_corrupted_settings() -> void:
+#endregion
+
+
+#region Test Helpers
+## move_to_element_and_click() is a coroutine that simulates moving the mouse to a Control node and
+## left clicking it.
+func move_to_element_and_click(element: Control) -> void:
+	runner.set_mouse_pos(
+		utilities.add_button_offset_to_pos(
+			utilities.get_adjusted_screen_position(settings_component, element)
+		)
+	)
+	await runner.await_input_processed()
+	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	await runner.await_input_processed()
 #endregion

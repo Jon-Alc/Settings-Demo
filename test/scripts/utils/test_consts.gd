@@ -1,5 +1,5 @@
 # GdUnit generated TestSuite
-class_name SettingsTestConsts
+class_name TestConsts
 
 #region Variables
 # Filepaths

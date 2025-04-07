@@ -114,7 +114,7 @@ func _change_resolution(new_res: GlobalEnums.DisplaySettingsID) -> void:
 		GlobalEnums.DisplaySettingsID._1366x768:  DisplayServer.window_set_size(Vector2i(1366, 768))
 		GlobalEnums.DisplaySettingsID._800x600:   DisplayServer.window_set_size(Vector2i(800, 600))
 		GlobalEnums.DisplaySettingsID._640x480:   DisplayServer.window_set_size(Vector2i(640, 480))
-		
+	
 	_center_window()
 
 
@@ -425,5 +425,7 @@ func _on_cancel_button_pressed() -> void:
 func _display_prompt_accept_reset() -> void:
 	_initialize_settings()
 	_read_settings()
+	_change_resolution(resolution_setting)
+	_change_window_mode(window_mode_setting)
 #endregion
 #endregion
