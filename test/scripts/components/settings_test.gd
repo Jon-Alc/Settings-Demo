@@ -25,16 +25,9 @@ func before() -> void:
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
-## before every test:
-## - delete the test settings.json if one exists
-## - reload the scene runner and change the settings.json reference
-## - find relevant settings nodes
+## before every test, delete the test settings.json if one exists
 func before_test() -> void:
 	test_dir.remove("settings.json")
-	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
-	main_menu = runner.find_child("MainMenu")
-	settings_label = main_menu.find_child("SettingsLabel")
-	settings_component = runner.find_child("Settings")
 
 
 ## after all tests:
@@ -50,7 +43,9 @@ func after() -> void:
 func test__open_settings() -> void:
 	# Arrange
 	# Act
-	await move_to_element_and_click(settings_label)
+	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	get_settings_nodes()
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	# Assert
 	assert_that(settings_component.visible).is_equal(true)
 
@@ -62,6 +57,7 @@ func test__initialize_settings() -> void:
 	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_INITIALIZE_EXP_PATH)
 	var actual_dict : Dictionary
 	# Act
+	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
@@ -71,23 +67,26 @@ func test__initialize_settings() -> void:
 ## data. It then tests if the "reset to default" button resets the data properly.
 func test__reset_to_default() -> void:
 	# Arrange
+	utilities.replace_test_settings_data(consts.TEST_RESET_DUMMY_PATH)
 	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_EXP_PATH)
 	var dummy_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_DUMMY_PATH)
 	var actual_dict : Dictionary
-	var reset_button : Button = runner.find_child("ResetDefaultButton")
+	var reset_button : Button
 	var display_prompt : Control
 	var accept_button : Button
 	# Act
-	utilities.replace_test_settings_data(consts.TEST_RESET_DUMMY_PATH)
-	await move_to_element_and_click(settings_label)
-	await move_to_element_and_click(reset_button)
+	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	get_settings_nodes()
+	reset_button = runner.find_child("ResetDefaultButton")
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	await utilities.move_to_element_and_click(runner, settings_component, reset_button)
 	# DisplayPrompt gets instantiated, now find it and the accept button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
 	assert_that(display_prompt.visible).is_equal(true)
 	
 	accept_button = display_prompt.find_child("AcceptButton")
-	await move_to_element_and_click(accept_button)
+	await utilities.move_to_element_and_click(runner, settings_component, accept_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_that(display_prompt).is_null()
@@ -97,41 +96,47 @@ func test__reset_to_default() -> void:
 
 func test__reset_cancel() -> void:
 	# Arrange
+	utilities.replace_test_settings_data(consts.TEST_RESET_CANCEL_DUMMY_PATH)
 	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_CANCEL_EXP_PATH)
 	var actual_dict : Dictionary
-	var reset_button : Button = runner.find_child("ResetDefaultButton")
+	var reset_button : Button
 	var display_prompt : Control
 	var cancel_button : Button
 	# Act
-	utilities.replace_test_settings_data(consts.TEST_RESET_CANCEL_DUMMY_PATH)
-	await move_to_element_and_click(settings_label)
-	await move_to_element_and_click(reset_button)
+	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	get_settings_nodes()
+	reset_button = runner.find_child("ResetDefaultButton")
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	await utilities.move_to_element_and_click(runner, settings_component, reset_button)
 	# DisplayPrompt gets instantiated, now find it and the cancel button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
 	assert_that(display_prompt.visible).is_equal(true)
 
 	cancel_button = display_prompt.find_child("CancelButton")
-	await move_to_element_and_click(cancel_button)
+	await utilities.move_to_element_and_click(runner, settings_component, cancel_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_that(display_prompt).is_null()
 	assert_dict(actual_dict).is_equal(expected_dict)
 
-## TODO: func test__fix_corrupted_settings() -> void:
+
+func test__fix_corrupted_settings() -> void:
+	# Arrange
+	utilities.replace_test_settings_data(consts.TEST_FIX_CORRUPTED_DUMMY_PATH)
+	var actual_dict : Dictionary
+	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_FIX_CORRUPTED_EXP_PATH)
+	# Act
+	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
+	# Assert
+	assert_that(actual_dict).is_equal(expected_dict)
 #endregion
 
 
 #region Test Helpers
-## move_to_element_and_click() is a coroutine that simulates moving the mouse to a Control node and
-## left clicking it.
-func move_to_element_and_click(element: Control) -> void:
-	runner.set_mouse_pos(
-		utilities.add_button_offset_to_pos(
-			utilities.get_adjusted_screen_position(settings_component, element)
-		)
-	)
-	await runner.await_input_processed()
-	runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	await runner.await_input_processed()
+func get_settings_nodes() -> void:
+	main_menu = runner.find_child("MainMenu")
+	settings_label = main_menu.find_child("SettingsLabel")
+	settings_component = runner.find_child("Settings")
 #endregion

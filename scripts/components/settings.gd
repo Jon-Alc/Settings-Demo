@@ -238,6 +238,7 @@ func _read_settings() -> void:
 		
 	var readfile : FileAccess = FileAccess.open(settings_file_path, FileAccess.READ)
 	var settings_string : String = readfile.get_as_text()
+	readfile = null
 	print(settings_string)
 	
 	var value : Variant = JSON.parse_string(settings_string)
@@ -245,12 +246,17 @@ func _read_settings() -> void:
 	# if settings.json couldn't be read
 	if not value:
 		print("settings.json unable to be read, re-initializing settings...")
-		readfile = null
 		_initialize_settings()
 		_read_settings()
 		return
 	
 	var settings_dict : Dictionary = JSON.parse_string(settings_string)
+	if not _json_matches_settings_format(settings_dict):
+		print("settings.json doesn't contain all settings, re-initializing settings...")
+		_initialize_settings()
+		_read_settings()
+		return
+	
 	var resolution_value : String = settings_dict["resolution"]
 	var window_mode_value : String = settings_dict["window_mode"]
 	var max_framerate_value : int = settings_dict["framerate"]
@@ -291,6 +297,19 @@ func _read_settings() -> void:
 	sound_volume_setting = sound_volume_value
 	current_sound_volume = sound_volume_value
 	sound_volume_slider.value = current_sound_volume
+
+
+## _json_matches_settings_format() returns true if all settings keys are found in the dictionary.
+func _json_matches_settings_format(json_dict: Dictionary) -> bool:
+	var keys : Array = json_dict.keys()
+	return true if "resolution" in keys and \
+		"window_mode" in keys and \
+		"framerate" in keys and \
+		"vsync" in keys and \
+		"background" in keys and \
+		"master_volume" in keys and \
+		"music_volume" in keys and \
+		"sound_volume" in keys else false
 
 
 ## _initialize_settings() is called if there is no settings.json file, or it can't be read. It
