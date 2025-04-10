@@ -12,7 +12,7 @@ extends Control
 @onready var background_check_box: CheckBox = %BackgroundCheckBox
 @onready var master_volume_slider: HSlider = %MasterVolumeSlider
 @onready var music_volume_slider: HSlider = %MusicVolumeSlider
-@onready var sound_volume_slider: HSlider = %SoundVolumeSlider
+@onready var sound_volume_slider: HSlider = %SFXVolumeSlider
 
 var sfx_audio_stream: AudioStreamPlayer2D
 
