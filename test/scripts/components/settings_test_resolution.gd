@@ -20,8 +20,9 @@ var utilities : TestUtilities = TestUtilities.new()
 #endregion
 
 
-## before any test, set up DirAccess
-func before() -> void:
+## before any test, skip the suite if the window is embedded
+## otherwise, set up DirAccess
+func before(do_skip: bool=Engine.is_embedded_in_editor()) -> void:
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
@@ -47,8 +48,7 @@ func after() -> void:
 
 #region Tests
 ## test__resolution_640x480 selects the resolution option _640x480 and checks that the proper
-## settings are applied. In addition to testing the methods below, it also checks that the
-## resolution enums and their indices match.
+## settings are applied.
 func test__resolution_640x480() -> void:
 	# Arrange
 	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RES_640X480_EXP_PATH)
@@ -60,8 +60,9 @@ func test__resolution_640x480() -> void:
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	resolution_options = runner.find_child("ResolutionOptions")
 	await utilities.move_to_element_and_click(runner, settings_component, resolution_options)
-	runner.simulate_key_press(KEY_DOWN)
-	await runner.await_input_processed()
+	for i : int in range(GlobalEnums.DisplaySettingsID._640x480 + 1):
+		runner.simulate_key_press(KEY_DOWN)
+		await runner.await_input_processed()
 	runner.simulate_key_press(KEY_ENTER)
 	await runner.await_input_processed()
 	accept_button = runner.find_child("AcceptButton")
@@ -72,6 +73,34 @@ func test__resolution_640x480() -> void:
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
 	assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(640, 480))
+
+
+## test__resolution_800x600 selects the resolution option _640x480 and checks that the proper
+## settings are applied.
+func test__resolution_800x600() -> void:
+	# Arrange
+	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RES_800X600_EXP_PATH)
+	var actual_dict : Dictionary
+	var resolution_options : OptionButton
+	var accept_button : Button
+	var save_changes_button : Button
+	# Act
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	resolution_options = runner.find_child("ResolutionOptions")
+	await utilities.move_to_element_and_click(runner, settings_component, resolution_options)
+	for i : int in range(GlobalEnums.DisplaySettingsID._800x600 + 1):
+		runner.simulate_key_press(KEY_DOWN)
+		await runner.await_input_processed()
+	runner.simulate_key_press(KEY_ENTER)
+	await runner.await_input_processed()
+	accept_button = runner.find_child("AcceptButton")
+	await utilities.move_to_element_and_click(runner, settings_component, accept_button)
+	save_changes_button = runner.find_child("SaveChangesButton")
+	await utilities.move_to_element_and_click(runner, settings_component, save_changes_button)
+	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
+	# Assert
+	assert_dict(actual_dict).is_equal(expected_dict)
+	assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(800, 600))
 
 
 #func test__resolution_timeout() -> void:
