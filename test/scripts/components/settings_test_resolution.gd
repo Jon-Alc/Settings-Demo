@@ -54,11 +54,20 @@ func test__resolution_640x480() -> void:
 	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RES_640X480_EXP_PATH)
 	var actual_dict : Dictionary
 	var resolution_options : OptionButton
+	var accept_button : Button
+	var save_changes_button : Button
 	# Act
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	resolution_options = runner.find_child("ResolutionOptions")
 	await utilities.move_to_element_and_click(runner, settings_component, resolution_options)
-	await await_millis(10000)
+	runner.simulate_key_press(KEY_DOWN)
+	await runner.await_input_processed()
+	runner.simulate_key_press(KEY_ENTER)
+	await runner.await_input_processed()
+	accept_button = runner.find_child("AcceptButton")
+	await utilities.move_to_element_and_click(runner, settings_component, accept_button)
+	save_changes_button = runner.find_child("SaveChangesButton")
+	await utilities.move_to_element_and_click(runner, settings_component, save_changes_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
