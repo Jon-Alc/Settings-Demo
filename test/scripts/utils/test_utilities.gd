@@ -11,6 +11,7 @@ func get_json_data(json_file_path: String) -> Dictionary:
 	var data : Dictionary = JSON.parse_string(file_contents)
 	return data
 
+
 ## replace_test_settings_data() replaces the test settings.json's data with another json file's
 ## data.
 func replace_test_settings_data(json_file_path: String) -> void:

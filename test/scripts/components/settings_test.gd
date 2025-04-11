@@ -16,6 +16,7 @@ var settings_label : Label
 var settings_component : Control
 
 var consts : TestConsts = TestConsts.new()
+var settings_consts : TestSettingsConsts = TestSettingsConsts.new()
 var utilities : TestUtilities = TestUtilities.new()
 #endregion
 
@@ -54,7 +55,7 @@ func test__open_settings() -> void:
 ## that it matches the json string in the consts autoload.
 func test__initialize_settings() -> void:
 	# Arrange
-	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_INITIALIZE_EXP_PATH)
+	var expected_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_INITIALIZE_EXP_PATH)
 	var actual_dict : Dictionary
 	# Act
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
@@ -67,9 +68,9 @@ func test__initialize_settings() -> void:
 ## data. It then tests if the "reset to default" button resets the data properly.
 func test__reset_to_default() -> void:
 	# Arrange
-	utilities.replace_test_settings_data(consts.TEST_RESET_DUMMY_PATH)
-	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_EXP_PATH)
-	var dummy_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_DUMMY_PATH)
+	utilities.replace_test_settings_data(settings_consts.TEST_RESET_DUMMY_PATH)
+	var expected_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_RESET_EXP_PATH)
+	var dummy_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_RESET_DUMMY_PATH)
 	var actual_dict : Dictionary
 	var reset_button : Button
 	var display_prompt : Control
@@ -96,8 +97,8 @@ func test__reset_to_default() -> void:
 
 func test__reset_cancel() -> void:
 	# Arrange
-	utilities.replace_test_settings_data(consts.TEST_RESET_CANCEL_DUMMY_PATH)
-	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_CANCEL_EXP_PATH)
+	utilities.replace_test_settings_data(settings_consts.TEST_RESET_CANCEL_DUMMY_PATH)
+	var expected_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_RESET_CANCEL_EXP_PATH)
 	var actual_dict : Dictionary
 	var reset_button : Button
 	var display_prompt : Control
@@ -123,9 +124,9 @@ func test__reset_cancel() -> void:
 
 func test__fix_corrupted_settings() -> void:
 	# Arrange
-	utilities.replace_test_settings_data(consts.TEST_FIX_CORRUPTED_DUMMY_PATH)
+	utilities.replace_test_settings_data(settings_consts.TEST_FIX_CORRUPTED_DUMMY_PATH)
 	var actual_dict : Dictionary
-	var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_FIX_CORRUPTED_EXP_PATH)
+	var expected_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_FIX_CORRUPTED_EXP_PATH)
 	# Act
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
