@@ -12,7 +12,7 @@ jobs:
       statuses: write
     steps:
       - uses: actions/checkout@v4
-      - uses: MikeSchulze/gdunit4-action@v1.1.6
+      - uses: MikeSchulze/gdunit4-action@v1
         with:
           godot-version: '4.4.1'
           paths: 'res://test'
