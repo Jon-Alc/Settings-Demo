@@ -2,8 +2,9 @@ class_name Settings
 extends Control
 
 #region Variables
+@export var display_prompt_component: PackedScene = preload("res://nodes/components/display_prompt.tscn")
+
 @onready var settings: Control = $"."
-@onready var display_prompt: Control = %DisplayPrompt
 @onready var resolution_options: OptionButton = %ResolutionOptions
 @onready var window_mode_options: OptionButton = %FullscreenOptions
 @onready var framerate_spin_box: SpinBox = %FramerateSpinBox
@@ -11,8 +12,9 @@ extends Control
 @onready var background_check_box: CheckBox = %BackgroundCheckBox
 @onready var master_volume_slider: HSlider = %MasterVolumeSlider
 @onready var music_volume_slider: HSlider = %MusicVolumeSlider
-@onready var sound_volume_slider: HSlider = %SoundVolumeSlider
-@onready var sfx_audio_stream: AudioStreamPlayer2D = %SFXAudioStream
+@onready var sound_volume_slider: HSlider = %SFXVolumeSlider
+
+var sfx_audio_stream: AudioStreamPlayer2D
 
 ## the path of the parent folder to the settings file, saved here for caching and testing
 ## in-game, it should be defined to GlobalConsts.SAVE_PATH
@@ -66,10 +68,17 @@ var current_sound_volume : int
 #endregion
 
 
-func _init(given_parent_folder_path: String=GlobalConsts.SAVE_PATH,
-given_settings_file_path: String=GlobalConsts.SETTINGS_FILE_PATH) -> void:
+## pass_dependencies() is meant to be used after an instance of this is instantiated. It passes the
+## dependencies for this node's script.
+func pass_dependencies(
+	sfx_audio_node: AudioStreamPlayer2D,
+	given_parent_folder_path: String=GlobalConsts.SAVE_PATH,
+	given_settings_file_path: String=GlobalConsts.SETTINGS_FILE_PATH,
+) -> Settings:
+	sfx_audio_stream = sfx_audio_node
 	parent_folder_path = given_parent_folder_path
 	settings_file_path = given_settings_file_path
+	return self
 
 
 #region _ready() functions
@@ -105,7 +114,7 @@ func _change_resolution(new_res: GlobalEnums.DisplaySettingsID) -> void:
 		GlobalEnums.DisplaySettingsID._1366x768:  DisplayServer.window_set_size(Vector2i(1366, 768))
 		GlobalEnums.DisplaySettingsID._800x600:   DisplayServer.window_set_size(Vector2i(800, 600))
 		GlobalEnums.DisplaySettingsID._640x480:   DisplayServer.window_set_size(Vector2i(640, 480))
-		
+	
 	_center_window()
 
 
@@ -122,6 +131,8 @@ func _center_window() -> void:
 func _on_resolution_option_item_selected(index: int) -> void:
 	new_resolution = GlobalEnums.int_to_display_settings_id(index)
 	_change_resolution(new_resolution)
+	var display_prompt : Control = display_prompt_component.instantiate()
+	add_child(display_prompt)
 	display_prompt.timed_prompt(
 		"Would you like to keep these settings?", 15, _display_prompt_accept_resolution,
 		_display_prompt_cancel_resolution, _display_prompt_cancel_resolution
@@ -227,6 +238,7 @@ func _read_settings() -> void:
 		
 	var readfile : FileAccess = FileAccess.open(settings_file_path, FileAccess.READ)
 	var settings_string : String = readfile.get_as_text()
+	readfile = null
 	print(settings_string)
 	
 	var value : Variant = JSON.parse_string(settings_string)
@@ -234,12 +246,17 @@ func _read_settings() -> void:
 	# if settings.json couldn't be read
 	if not value:
 		print("settings.json unable to be read, re-initializing settings...")
-		readfile = null
 		_initialize_settings()
 		_read_settings()
 		return
 	
 	var settings_dict : Dictionary = JSON.parse_string(settings_string)
+	if not _json_matches_settings_format(settings_dict):
+		print("settings.json doesn't contain all settings, re-initializing settings...")
+		_initialize_settings()
+		_read_settings()
+		return
+	
 	var resolution_value : String = settings_dict["resolution"]
 	var window_mode_value : String = settings_dict["window_mode"]
 	var max_framerate_value : int = settings_dict["framerate"]
@@ -280,6 +297,19 @@ func _read_settings() -> void:
 	sound_volume_setting = sound_volume_value
 	current_sound_volume = sound_volume_value
 	sound_volume_slider.value = current_sound_volume
+
+
+## _json_matches_settings_format() returns true if all settings keys are found in the dictionary.
+func _json_matches_settings_format(json_dict: Dictionary) -> bool:
+	var keys : Array = json_dict.keys()
+	return true if "resolution" in keys and \
+		"window_mode" in keys and \
+		"framerate" in keys and \
+		"vsync" in keys and \
+		"background" in keys and \
+		"master_volume" in keys and \
+		"music_volume" in keys and \
+		"sound_volume" in keys else false
 
 
 ## _initialize_settings() is called if there is no settings.json file, or it can't be read. It
@@ -356,6 +386,8 @@ func _on_save_changes_button_pressed() -> void:
 ## Deletes the settings.json file and re-initializes it
 func _on_reset_default_button_pressed() -> void:
 	sfx_audio_stream.play()
+	var display_prompt : Control = display_prompt_component.instantiate()
+	add_child(display_prompt)
 	display_prompt.prompt("Are you sure you want to reset your settings to the default?",
 	_display_prompt_accept_reset)
 
@@ -412,5 +444,7 @@ func _on_cancel_button_pressed() -> void:
 func _display_prompt_accept_reset() -> void:
 	_initialize_settings()
 	_read_settings()
+	_change_resolution(resolution_setting)
+	_change_window_mode(window_mode_setting)
 #endregion
 #endregion

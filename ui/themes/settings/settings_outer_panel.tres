@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://n7wrhx8vdlqp"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://n7wrhx8vdlqp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lg5a0"]
 bg_color = Color(0.227451, 0.164706, 0.121569, 1)
@@ -10,5 +10,15 @@ shadow_color = Color(0.0687983, 0.0687983, 0.0687983, 0.6)
 shadow_size = 8
 shadow_offset = Vector2(0, 4)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tvnrc"]
+bg_color = Color(0.227451, 0.164706, 0.121569, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
 [resource]
 Panel/styles/panel = SubResource("StyleBoxFlat_lg5a0")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_tvnrc")

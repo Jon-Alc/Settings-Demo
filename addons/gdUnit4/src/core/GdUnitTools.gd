@@ -27,36 +27,32 @@ static func prints_verbose(message :String) -> void:
 		prints(message)
 
 
+@warning_ignore("unsafe_cast")
 static func free_instance(instance :Variant, use_call_deferred :bool = false, is_stdout_verbose := false) -> bool:
 	if instance is Array:
-		var as_array: Array = instance
-		for element: Variant in as_array:
+		for element :Variant in instance:
 			@warning_ignore("return_value_discarded")
 			free_instance(element)
-		as_array.clear()
+		(instance as Array).clear()
 		return true
 	# do not free an already freed instance
 	if not is_instance_valid(instance):
 		return false
 	# do not free a class refernece
-	@warning_ignore("unsafe_cast")
 	if typeof(instance) == TYPE_OBJECT and (instance as Object).is_class("GDScriptNativeClass"):
 		return false
 	if is_stdout_verbose:
 		print_verbose("GdUnit4:gc():free instance ", instance)
-	@warning_ignore("unsafe_cast")
 	release_double(instance as Object)
 	if instance is RefCounted:
-		@warning_ignore("unsafe_cast")
 		(instance as RefCounted).notification(Object.NOTIFICATION_PREDELETE)
 		# If scene runner freed we explicit await all inputs are processed
 		if instance is GdUnitSceneRunnerImpl:
-			@warning_ignore("unsafe_cast")
 			await (instance as GdUnitSceneRunnerImpl).await_input_processed()
 		return true
 	else:
 		if instance is Timer:
-			var timer: Timer = instance
+			var timer := instance as Timer
 			timer.stop()
 			if use_call_deferred:
 				timer.call_deferred("free")
@@ -65,9 +61,8 @@ static func free_instance(instance :Variant, use_call_deferred :bool = false, is
 				await (Engine.get_main_loop() as SceneTree).process_frame
 			return true
 
-		@warning_ignore("unsafe_cast")
 		if instance is Node and (instance as Node).get_parent() != null:
-			var node: Node = instance
+			var node := instance as Node
 			if is_stdout_verbose:
 				print_verbose("GdUnit4:gc():remove node from parent ", node.get_parent(), node)
 			if use_call_deferred:
@@ -78,10 +73,8 @@ static func free_instance(instance :Variant, use_call_deferred :bool = false, is
 		if is_stdout_verbose:
 			print_verbose("GdUnit4:gc():freeing `free()` the instance ", instance)
 		if use_call_deferred:
-			@warning_ignore("unsafe_cast")
 			(instance as Object).call_deferred("free")
 		else:
-			@warning_ignore("unsafe_cast")
 			(instance as Object).free()
 		return !is_instance_valid(instance)
 
@@ -127,18 +120,6 @@ static func release_double(instance :Object) -> void:
 		instance.call("__release_double")
 
 
-
-static func find_test_case(test_suite: Node, test_case_name: String, index := -1) -> _TestCase:
-	for test_case: _TestCase in test_suite.get_children():
-		if test_case.test_name() == test_case_name:
-			if index != -1:
-				if test_case._test_case.attribute_index != index:
-					continue
-			return test_case
-	return null
-
-
-static func register_expect_interupted_by_timeout(test_suite: Node, test_case_name: String) -> void:
-	var test_case := find_test_case(test_suite, test_case_name)
-	if test_case:
-		test_case.expect_to_interupt()
+static func register_expect_interupted_by_timeout(test_suite :Node, test_case_name :String) -> void:
+	var test_case: _TestCase = test_suite.find_child(test_case_name, false, false)
+	test_case.expect_to_interupt()

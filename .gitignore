@@ -16,3 +16,4 @@ mono_crash.*.json
 
 # Project-specific
 builds/
+test/data/settings/settings.json

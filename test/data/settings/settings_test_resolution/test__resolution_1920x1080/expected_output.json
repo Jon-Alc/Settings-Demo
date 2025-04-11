@@ -1,0 +1,10 @@
+{
+	"resolution": "_1920x1080",
+	"window_mode": "WINDOWED",
+	"framerate": 60,
+	"vsync": "ON",
+	"background": 1,
+	"master_volume": 75,
+	"music_volume": 75,
+	"sound_volume": 75
+}
