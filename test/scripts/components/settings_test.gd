@@ -48,7 +48,7 @@ func test__open_settings() -> void:
 	get_settings_nodes()
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	# Assert
-	assert_that(settings_component.visible).is_equal(true)
+	assert_bool(settings_component.visible).is_true()
 
 
 ## test__initialize_settings() checks if settings.json is created when there is no existing one, and
@@ -84,7 +84,7 @@ func test__reset_to_default() -> void:
 	# DisplayPrompt gets instantiated, now find it and the accept button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
-	assert_that(display_prompt.visible).is_equal(true)
+	assert_bool(display_prompt.visible).is_true()
 	
 	accept_button = display_prompt.find_child("AcceptButton")
 	await utilities.move_to_element_and_click(runner, settings_component, accept_button)
@@ -112,7 +112,7 @@ func test__reset_cancel() -> void:
 	# DisplayPrompt gets instantiated, now find it and the cancel button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
-	assert_that(display_prompt.visible).is_equal(true)
+	assert_bool(display_prompt.visible).is_true()
 
 	cancel_button = display_prompt.find_child("CancelButton")
 	await utilities.move_to_element_and_click(runner, settings_component, cancel_button)

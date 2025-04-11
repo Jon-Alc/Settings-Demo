@@ -42,7 +42,7 @@ func after() -> void:
 
 
 #region Tests
-## test__resolution_640x480 selects the resolution option _640x480 and checks that the proper
+## test__resolution_640x480() selects the resolution option _640x480 and checks that the proper
 ## settings are applied.
 func test__resolution_640x480(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(640, 480)) -> void:
 	_load_scene()
@@ -53,7 +53,7 @@ func test__resolution_640x480(do_skip: bool=DisplayServer.screen_get_size() <= V
 	)
 
 
-## test__resolution_800x600 selects the resolution option _800x600 and checks that the proper
+## test__resolution_800x600() selects the resolution option _800x600 and checks that the proper
 ## settings are applied.
 func test__resolution_800x600(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(800, 600)) -> void:
 	_load_scene()
@@ -64,7 +64,7 @@ func test__resolution_800x600(do_skip: bool=DisplayServer.screen_get_size() <= V
 	)
 
 
-## test__resolution_1366x768 selects the resolution option _1366x768 and checks that the proper
+## test__resolution_1366x768() selects the resolution option _1366x768 and checks that the proper
 ## settings are applied.
 func test__resolution_1366x768(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1366, 768)) -> void:
 	utilities.replace_test_settings_data(res_consts.TEST_RES_1366X768_DUMMY_PATH)
@@ -76,7 +76,7 @@ func test__resolution_1366x768(do_skip: bool=DisplayServer.screen_get_size() <= 
 	)
 
 
-## test__resolution_1600x900 selects the resolution option _1600x900 and checks that the proper
+## test__resolution_1600x900() selects the resolution option _1600x900 and checks that the proper
 ## settings are applied.
 func test__resolution_1600x900(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1600, 900)) -> void:
 	_load_scene()
@@ -87,7 +87,7 @@ func test__resolution_1600x900(do_skip: bool=DisplayServer.screen_get_size() <= 
 	)
 
 
-## test__resolution_1920x1080 selects the resolution option _1920x1080 and checks that the proper
+## test__resolution_1920x1080() selects the resolution option _1920x1080 and checks that the proper
 ## settings are applied.
 func test__resolution_1920x1080(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1920, 1080)) -> void:
 	_load_scene()
@@ -98,7 +98,7 @@ func test__resolution_1920x1080(do_skip: bool=DisplayServer.screen_get_size() <=
 	)
 
 
-## test__resolution_1920x1200 selects the resolution option _1920x1200 and checks that the proper
+## test__resolution_1920x1200() selects the resolution option _1920x1200 and checks that the proper
 ## settings are applied.
 func test__resolution_1920x1200(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1920, 1200)) -> void:
 	_load_scene()
@@ -109,7 +109,7 @@ func test__resolution_1920x1200(do_skip: bool=DisplayServer.screen_get_size() <=
 	)
 
 
-## test__resolution_2560x1440 selects the resolution option _2560x1440 and checks that the proper
+## test__resolution_2560x1440() selects the resolution option _2560x1440 and checks that the proper
 ## settings are applied.
 func test__resolution_2560x1440(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(2560, 1440)) -> void:
 	_load_scene()
@@ -120,7 +120,7 @@ func test__resolution_2560x1440(do_skip: bool=DisplayServer.screen_get_size() <=
 	)
 
 
-## test__resolution_2560x1600 selects the resolution option _2560x1600 and checks that the proper
+## test__resolution_2560x1600() selects the resolution option _2560x1600 and checks that the proper
 ## settings are applied.
 func test__resolution_2560x1600(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(2560, 1600)) -> void:
 	_load_scene()
@@ -131,7 +131,7 @@ func test__resolution_2560x1600(do_skip: bool=DisplayServer.screen_get_size() <=
 	)
 
 
-## test__resolution_3840x2160 selects the resolution option _3840x2160 and checks that the proper
+## test__resolution_3840x2160() selects the resolution option _3840x2160 and checks that the proper
 ## settings are applied.
 func test__resolution_3840x2160(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(3840, 2160)) -> void:
 	_load_scene()
@@ -142,26 +142,68 @@ func test__resolution_3840x2160(do_skip: bool=DisplayServer.screen_get_size() <=
 	)
 
 
-#func test__resolution_timeout() -> void:
-	## Arrange
-	#var expected_dict : Dictionary = utilities.get_json_data(consts.TEST_RESET_TIMEOUT_EXP_PATH)
-	#var actual_dict : Dictionary
-	#var reset_button : Button = runner.find_child("ResetDefaultButton")
-	#var display_prompt : Control
-	## Act
-	#utilities.replace_test_settings_data(consts.TEST_RESET_TIMEOUT_DUMMY_PATH)
-	#utilities.move_to_element_and_click(runner, settings_component, settings_label)
-	#runner.set_mouse_position(reset_button.get_screen_position() + consts.BUTTON_OFFSET)
-	#await runner.await_input_processed()
-	#runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	#await runner.await_input_processed()
-	## DisplayPrompt gets instantiated, now find it
-	#display_prompt = runner.find_child("DisplayPrompt")
-	## Assert
-	#assert(display_prompt.visible)
-	#await await_millis(16000)
-	#assert(!display_prompt.visible)
-	#assert_dict(actual_dict).is_equal(expected_dict)
+## test_resolution_timeout() tests that the display prompt reverts to original settings when the
+## display prompt times out.
+func test__resolution_timeout() -> void:
+	# Arrange
+	var expected_dict : Dictionary = utilities.get_json_data(res_consts.TEST_RESET_TIMEOUT_EXP_PATH)
+	var actual_dict : Dictionary
+	var resolution_options : OptionButton
+	var display_prompt : Control
+	_load_scene()
+	# Act
+	# go to settings
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	
+	# pick any resolution to bring up the DisplayPrompt
+	resolution_options = runner.find_child("ResolutionOptions")
+	await utilities.move_to_element_and_click(runner, settings_component, resolution_options)
+	runner.simulate_key_press(KEY_DOWN)
+	await runner.await_input_processed()
+	runner.simulate_key_press(KEY_ENTER)
+	await runner.await_input_processed()
+	display_prompt = runner.find_child("DisplayPrompt")
+	
+	# Assert
+	assert_bool(display_prompt.visible).is_true()
+	await await_millis(16000)
+	assert_that(display_prompt).is_null()
+	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
+	assert_dict(actual_dict).is_equal(expected_dict)
+	assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(1366, 768))
+
+
+## test_resolution_cancel() tests that the display prompt reverts to original settings when the
+## cancel button is clicked in the display prompt.
+func test__resolution_cancel() -> void:
+	# Arrange
+	var expected_dict : Dictionary = utilities.get_json_data(res_consts.TEST_RESET_CANCEL_EXP_PATH)
+	var actual_dict : Dictionary
+	var resolution_options : OptionButton
+	var display_prompt : Control
+	var cancel_button : Button
+	_load_scene()
+	# Act
+	# go to settings
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	
+	# pick any resolution to bring up the DisplayPrompt
+	resolution_options = runner.find_child("ResolutionOptions")
+	await utilities.move_to_element_and_click(runner, settings_component, resolution_options)
+	runner.simulate_key_press(KEY_DOWN)
+	await runner.await_input_processed()
+	runner.simulate_key_press(KEY_ENTER)
+	await runner.await_input_processed()
+	display_prompt = runner.find_child("DisplayPrompt")
+	cancel_button = display_prompt.find_child("CancelButton")
+	
+	# Assert
+	assert_bool(display_prompt.visible).is_true()
+	await utilities.move_to_element_and_click(runner, settings_component, cancel_button)
+	assert_that(display_prompt).is_null()
+	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
+	assert_dict(actual_dict).is_equal(expected_dict)
+	assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(1366, 768))
 #endregion
 
 
