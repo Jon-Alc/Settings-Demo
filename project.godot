@@ -23,6 +23,7 @@ GlobalConsts="*res://scripts/autoloads/global_consts.gd"
 
 [debug]
 
+file_logging/enable_file_logging=true
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=2
 
