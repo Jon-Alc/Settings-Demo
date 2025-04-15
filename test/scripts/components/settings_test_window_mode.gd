@@ -23,7 +23,11 @@ var utilities : TestUtilities = TestUtilities.new()
 
 ## before any test, skip the suite if the window is embedded
 ## otherwise, set up DirAccess
-func before(do_skip : bool=DisplayServer.get_name().contains("headless")) -> void:
+@warning_ignore('unused_parameter')
+func before(
+	do_skip : bool=DisplayServer.get_name().contains("headless"),
+	skip_reason : String="Cannot run scene runner tests in headless mode."
+) -> void:
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
@@ -90,9 +94,9 @@ func _load_scene_and_nodes() -> void:
 	settings_component = runner.find_child("Settings")
 
 
-## _window_mode_picker() is used by all fullscreen tests. It selects a given window mode and
+## _window_mode_picker() is used by all window mode tests. It selects a given window mode and
 ## compares the settings and window mode to a given file output and window mode.
-## This will fail if the window mode is already selected!
+## NOTE: This will fail if the window mode is already selected!
 func _window_mode_picker(
 	exp_output_path: String,
 	window_mode_setting_enum: GlobalEnums.WindowModeSettingsID,
@@ -113,20 +117,19 @@ func _window_mode_picker(
 	# click the window mode option
 	window_mode_options = runner.find_child("FullscreenOptions")
 	await utilities.move_to_element_and_click(runner, settings_component, window_mode_options)
-	await await_millis(1000)
+
 	# navigate through the window mode options by pressing down, then selecting it with "enter"
 	for i : int in range(window_mode_setting_enum + 1):
 		runner.simulate_key_press(KEY_DOWN)
 		await runner.await_input_processed()
 	runner.simulate_key_press(KEY_ENTER)
 	await runner.await_input_processed()
-	await await_millis(1000)
 	
 	# save the changes
 	save_changes_button = runner.find_child("SaveChangesButton")
 	await utilities.move_to_element_and_click(runner, settings_component, save_changes_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
-	await await_millis(1000)
+
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
 	assert_that(DisplayServer.window_get_mode()).is_equal(exp_window_mode)
