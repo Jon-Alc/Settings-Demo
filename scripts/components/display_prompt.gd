@@ -1,9 +1,9 @@
 class_name DisplayPrompt
 extends Control
 
-@onready var display_prompt: Control = $"."
-@onready var prompt_text: Label = %PromptText
-@onready var button_sfx: AudioStreamPlayer2D = $ButtonSFX
+# @onready var display_prompt: Control = $"."
+@export var prompt_text: Label
+@export var button_sfx: AudioStreamPlayer2D
 
 var accept_callback: Callable
 var cancel_callback: Callable
@@ -37,17 +37,17 @@ func timed_prompt(text: String, time: float, accept_func: Callable=Callable(),
 
 ## _show() reveals the prompt.
 func _show() -> void:
-	display_prompt.visible = true
+	visible = true
 
 
 ## _timed_show() reveals the prompt and sets a timer, which is appended to the prompt text. If the
 ## timer runs out, the timeout callback is called and the prompt is hidden.
 func _timed_show(text: String, timeout_func: Callable, time: float=5) -> void:
 	prompt_timer = get_tree().create_timer(time)
-	display_prompt.visible = true
+	visible = true
 	
 	while prompt_timer and prompt_timer.time_left > 0:
-		display_prompt.prompt_text.text = "%s (%s)" % [text, str(ceili(prompt_timer.time_left))]
+		prompt_text.text = "%s (%s)" % [text, str(ceili(prompt_timer.time_left))]
 		await get_tree().create_timer(.1).timeout
 
 	if not prompt_timer:

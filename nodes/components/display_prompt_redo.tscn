@@ -1,12 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://x7lto0oox3mt"]
+[gd_scene load_steps=9 format=3 uid="uid://b45r3ropyfhup"]
 
-[ext_resource type="Script" uid="uid://cl7d5jlfliax0" path="res://scripts/components/display_prompt.gd" id="1_7yvwd"]
-[ext_resource type="Theme" uid="uid://dhrd85spnh15m" path="res://ui/themes/display_prompt/display_prompt_outer.tres" id="1_bc887"]
-[ext_resource type="Theme" uid="uid://ystgfb3djo54" path="res://ui/themes/display_prompt/display_prompt_inner.tres" id="1_ggd58"]
-[ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="3_1g7g0"]
-[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="3_y327b"]
-[ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="4_i35js"]
-[ext_resource type="AudioStream" uid="uid://dnx1l3g7b87oy" path="res://assets/sfx/select.wav" id="7_i2661"]
+[ext_resource type="Script" uid="uid://cl7d5jlfliax0" path="res://scripts/components/display_prompt.gd" id="1_qnv2i"]
+[ext_resource type="Theme" uid="uid://dhrd85spnh15m" path="res://ui/themes/display_prompt/display_prompt_outer.tres" id="2_hugrf"]
+[ext_resource type="Theme" uid="uid://ystgfb3djo54" path="res://ui/themes/display_prompt/display_prompt_inner.tres" id="3_7lu6b"]
+[ext_resource type="FontFile" uid="uid://do1ejrjbf4a6j" path="res://assets/fonts/Sen-VariableFont_wght.ttf" id="4_i7ver"]
+[ext_resource type="Theme" uid="uid://dwnkenuo17h4d" path="res://ui/themes/display_prompt/accept_button/accept_button.tres" id="5_hwa8u"]
+[ext_resource type="Theme" uid="uid://cmq43yn0uvmha" path="res://ui/themes/display_prompt/cancel_button/cancel_button.tres" id="6_n2udh"]
+[ext_resource type="AudioStream" uid="uid://dnx1l3g7b87oy" path="res://assets/sfx/select.wav" id="7_rtyf2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2661"]
 bg_color = Color(0, 0, 0, 0.392157)
@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_7yvwd")
+script = ExtResource("1_qnv2i")
 prompt_text = NodePath("BackgroundPanel/ComponentMargin/DisplayPromptOuterPanel/VBoxContainer/DisplayPromptInnerMargin/DisplayPromptInnerPanel/TextMargin/PromptText")
 button_sfx = NodePath("ButtonSFX")
 
@@ -40,7 +40,7 @@ theme_override_constants/margin_bottom = 112
 
 [node name="DisplayPromptOuterPanel" type="PanelContainer" parent="BackgroundPanel/ComponentMargin"]
 layout_mode = 2
-theme = ExtResource("1_bc887")
+theme = ExtResource("2_hugrf")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BackgroundPanel/ComponentMargin/DisplayPromptOuterPanel"]
 layout_mode = 2
@@ -49,7 +49,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 10.0
-theme = ExtResource("1_ggd58")
+theme = ExtResource("3_7lu6b")
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 8
@@ -69,7 +69,7 @@ theme_override_constants/margin_right = 14
 custom_minimum_size = Vector2(180, 90)
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_fonts/font = ExtResource("3_y327b")
+theme_override_fonts/font = ExtResource("4_i7ver")
 theme_override_font_sizes/font_size = 11
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut"
 autowrap_mode = 2
@@ -92,7 +92,7 @@ size_flags_stretch_ratio = 5.0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
-theme = ExtResource("3_1g7g0")
+theme = ExtResource("5_hwa8u")
 text = "Accept"
 
 [node name="ButtonSpacer2" type="Control" parent="BackgroundPanel/ComponentMargin/DisplayPromptOuterPanel/VBoxContainer/ButtonMargin/HBoxContainer"]
@@ -103,7 +103,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
-theme = ExtResource("4_i35js")
+theme = ExtResource("6_n2udh")
 text = "Cancel"
 
 [node name="ButtonSpacer3" type="Control" parent="BackgroundPanel/ComponentMargin/DisplayPromptOuterPanel/VBoxContainer/ButtonMargin/HBoxContainer"]
@@ -112,7 +112,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 5.0
 
 [node name="ButtonSFX" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("7_i2661")
+stream = ExtResource("7_rtyf2")
 bus = &"SFX"
 
 [connection signal="pressed" from="BackgroundPanel/ComponentMargin/DisplayPromptOuterPanel/VBoxContainer/ButtonMargin/HBoxContainer/AcceptButton" to="." method="_on_accept_button_pressed"]
