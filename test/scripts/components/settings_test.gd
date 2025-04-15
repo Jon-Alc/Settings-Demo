@@ -22,13 +22,12 @@ var utilities : TestUtilities = TestUtilities.new()
 
 
 ## before any test, set up DirAccess
-func before() -> void:
+func before(do_skip : bool=DisplayServer.get_name().contains("headless")) -> void:
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
 ## before every test, delete the test settings.json if one exists
 func before_test() -> void:
-	await await_millis(2000)
 	print(DisplayServer.window_get_size())
 	test_dir.remove("settings.json")
 
@@ -49,7 +48,7 @@ func test__open_settings() -> void:
 	await runner.simulate_frames(1)
 	_find_settings_nodes()
 	# Act
-	await utilities.move_to_element_and_click(runner, settings_label)
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	# Assert
 	assert_bool(settings_component.visible).is_true()
 
@@ -83,15 +82,15 @@ func test__reset_to_default() -> void:
 	var reset_button : Button = runner.find_child("ResetDefaultButton")
 	# Act
 	print(reset_button.global_position)
-	await utilities.move_to_element_and_click(runner, settings_label)
-	await utilities.move_to_element_and_click(runner, reset_button)
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	await utilities.move_to_element_and_click(runner, settings_component, reset_button)
 	# DisplayPrompt gets instantiated, now find it and the accept button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
 	assert_bool(display_prompt.visible).is_true()
 	
 	accept_button = display_prompt.find_child("AcceptButton")
-	await utilities.move_to_element_and_click(runner, accept_button)
+	await utilities.move_to_element_and_click(runner, settings_component, accept_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_that(display_prompt).is_null()
@@ -111,15 +110,15 @@ func test__reset_cancel() -> void:
 	_find_settings_nodes()
 	var reset_button : Button = runner.find_child("ResetDefaultButton")
 	# Act
-	await utilities.move_to_element_and_click(runner, settings_label)
-	await utilities.move_to_element_and_click(runner, reset_button)
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	await utilities.move_to_element_and_click(runner, settings_component, reset_button)
 	# DisplayPrompt gets instantiated, now find it and the cancel button
 	display_prompt = runner.find_child("DisplayPrompt")
 	assert_that(display_prompt).is_not_null()
 	assert_bool(display_prompt.visible).is_true()
 
 	cancel_button = display_prompt.find_child("CancelButton")
-	await utilities.move_to_element_and_click(runner, cancel_button)
+	await utilities.move_to_element_and_click(runner, settings_component, cancel_button)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
 	assert_that(display_prompt).is_null()

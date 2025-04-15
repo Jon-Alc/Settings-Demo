@@ -23,7 +23,7 @@ var utilities : TestUtilities = TestUtilities.new()
 
 ## before any test, skip the suite if the window is embedded
 ## otherwise, set up DirAccess
-func before(do_skip: bool=Engine.is_embedded_in_editor()) -> void:
+func before(do_skip : bool=DisplayServer.get_name().contains("headless")) -> void:
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
@@ -45,7 +45,7 @@ func after() -> void:
 ## test__resolution_640x480() selects the resolution option _640x480 and checks that the proper
 ## settings are applied.
 func test__resolution_640x480(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(640, 480)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_640X480_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._640x480,
@@ -56,7 +56,7 @@ func test__resolution_640x480(do_skip: bool=DisplayServer.screen_get_size() <= V
 ## test__resolution_800x600() selects the resolution option _800x600 and checks that the proper
 ## settings are applied.
 func test__resolution_800x600(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(800, 600)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_800X600_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._800x600,
@@ -68,7 +68,7 @@ func test__resolution_800x600(do_skip: bool=DisplayServer.screen_get_size() <= V
 ## settings are applied.
 func test__resolution_1366x768(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1366, 768)) -> void:
 	utilities.replace_test_settings_data(res_consts.TEST_RES_1366X768_DUMMY_PATH)
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_1366X768_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1366x768,
@@ -79,7 +79,7 @@ func test__resolution_1366x768(do_skip: bool=DisplayServer.screen_get_size() <= 
 ## test__resolution_1600x900() selects the resolution option _1600x900 and checks that the proper
 ## settings are applied.
 func test__resolution_1600x900(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1600, 900)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_1600X900_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1600x900,
@@ -90,7 +90,7 @@ func test__resolution_1600x900(do_skip: bool=DisplayServer.screen_get_size() <= 
 ## test__resolution_1920x1080() selects the resolution option _1920x1080 and checks that the proper
 ## settings are applied.
 func test__resolution_1920x1080(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1920, 1080)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_1920X1080_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1920x1080,
@@ -101,7 +101,7 @@ func test__resolution_1920x1080(do_skip: bool=DisplayServer.screen_get_size() <=
 ## test__resolution_1920x1200() selects the resolution option _1920x1200 and checks that the proper
 ## settings are applied.
 func test__resolution_1920x1200(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1920, 1200)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_1920X1200_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1920x1200,
@@ -112,7 +112,7 @@ func test__resolution_1920x1200(do_skip: bool=DisplayServer.screen_get_size() <=
 ## test__resolution_2560x1440() selects the resolution option _2560x1440 and checks that the proper
 ## settings are applied.
 func test__resolution_2560x1440(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(2560, 1440)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_2560X1440_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._2560x1440,
@@ -123,7 +123,7 @@ func test__resolution_2560x1440(do_skip: bool=DisplayServer.screen_get_size() <=
 ## test__resolution_2560x1600() selects the resolution option _2560x1600 and checks that the proper
 ## settings are applied.
 func test__resolution_2560x1600(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(2560, 1600)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_2560X1600_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._2560x1600,
@@ -134,7 +134,7 @@ func test__resolution_2560x1600(do_skip: bool=DisplayServer.screen_get_size() <=
 ## test__resolution_3840x2160() selects the resolution option _3840x2160 and checks that the proper
 ## settings are applied.
 func test__resolution_3840x2160(do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(3840, 2160)) -> void:
-	_load_scene()
+	_load_scene_and_nodes()
 	await _resolution_picker(
 		res_consts.TEST_RES_3840X2160_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._3840x2160,
@@ -150,7 +150,7 @@ func test__resolution_timeout() -> void:
 	var actual_dict : Dictionary
 	var resolution_options : OptionButton
 	var display_prompt : Control
-	_load_scene()
+	_load_scene_and_nodes()
 	# Act
 	# go to settings
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
@@ -182,7 +182,7 @@ func test__resolution_cancel() -> void:
 	var resolution_options : OptionButton
 	var display_prompt : Control
 	var cancel_button : Button
-	_load_scene()
+	_load_scene_and_nodes()
 	# Act
 	# go to settings
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
@@ -208,11 +208,11 @@ func test__resolution_cancel() -> void:
 
 
 #region Test Helpers
-## _load_scene() loads the test scene and gets the initial nodes.
+## _load_scene_and_nodes() loads the test scene and gets the initial nodes.
 ## - delete the test settings.json if one exists
 ## - reload the scene runner and change the settings.json reference
 ## - find relevant settings nodes
-func _load_scene() -> void:
+func _load_scene_and_nodes() -> void:
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
 	main_menu = runner.find_child("MainMenu")
 	settings_label = main_menu.find_child("SettingsLabel")

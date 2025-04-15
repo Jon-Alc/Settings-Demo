@@ -11,9 +11,10 @@ const TEST_RES_640X480_EXP_PATH : String = \
 const TEST_RES_800X600_EXP_PATH : String = \
 	"res://test/data/settings/settings_test_resolution/test__resolution_800x600/expected_output.json"
 
-## The path to the expected output json for test__resolution_1366X768().
+## The path to the dummy input json for test__resolution_1366X768().
 const TEST_RES_1366X768_DUMMY_PATH : String = \
 	"res://test/data/settings/settings_test_resolution/test__resolution_1366x768/dummy_settings.json"
+## The path to the expected output json for test__resolution_1366X768().
 const TEST_RES_1366X768_EXP_PATH : String = \
 	"res://test/data/settings/settings_test_resolution/test__resolution_1366x768/expected_output.json"
 
