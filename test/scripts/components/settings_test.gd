@@ -168,6 +168,9 @@ func test__fix_corrupted_settings() -> void:
 ## called after the runner starts up.
 func _find_settings_nodes() -> void:
 	main_menu = runner.find_child("MainMenu")
+	print("MAIN MENU FOUND? %s" % main_menu)
 	settings_label = main_menu.find_child("SettingsLabel")
+	print("SETTINGS LABEL FOUND? %s" % settings_label)
 	settings_component = runner.find_child("Settings")
+	print("SETTINGS COMPONENT FOUND? %s" % settings_component)
 #endregion
