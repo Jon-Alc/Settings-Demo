@@ -79,6 +79,7 @@ func test__reset_to_default() -> void:
 	utilities.replace_test_settings_data(settings_consts.TEST_RESET_DUMMY_PATH)
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
 	await runner.simulate_frames(1)
+	print("TEST__RESET_TO_DEFAULT SCREEN SIZE: %s" % DisplayServer.window_get_size())
 	_find_settings_nodes()
 	
 	var expected_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_RESET_EXP_PATH)

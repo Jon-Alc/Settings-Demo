@@ -53,7 +53,6 @@ func after() -> void:
 ## proper settings are applied.
 func test__window_mode_fullscreen() -> void:
 	_load_scene_and_nodes()
-	print("(SETTINGS_TEST_WINDOW_MODE_FULLSCREEN) WINDOW_SIZE: %s" % DisplayServer.window_get_size())
 	await _window_mode_picker(
 		wm_consts.TEST_WM_FULLSCREEN_EXP_PATH,
 		GlobalEnums.WindowModeSettingsID.FULLSCREEN,
