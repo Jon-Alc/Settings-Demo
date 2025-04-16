@@ -88,11 +88,9 @@ func test__window_mode_borderless() -> void:
 
 #region Test Helpers
 ## _load_scene_and_nodes() loads the test scene and gets the initial nodes.
-## - delete the test settings.json if one exists
-## - reload the scene runner and change the settings.json reference
-## - find relevant settings nodes
 func _load_scene_and_nodes() -> void:
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	await runner.simulate_frames(1)
 	main_menu = runner.find_child("MainMenu")
 	settings_label = main_menu.find_child("SettingsLabel")
 	settings_component = runner.find_child("Settings")
@@ -127,10 +125,12 @@ func _window_mode_picker(
 		await runner.await_input_processed()
 	runner.simulate_key_press(KEY_ENTER)
 	await runner.await_input_processed()
+	await runner.simulate_frames(1)
 	
 	# save the changes
 	save_changes_button = runner.find_child("SaveChangesButton")
 	await utilities.move_to_element_and_click(runner, settings_component, save_changes_button)
+	await runner.simulate_frames(1)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 
 	# Assert

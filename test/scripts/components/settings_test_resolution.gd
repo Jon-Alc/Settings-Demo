@@ -254,6 +254,7 @@ func test__resolution_cancel() -> void:
 ## - find relevant settings nodes
 func _load_scene_and_nodes() -> void:
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	await runner.simulate_frames(1)
 	main_menu = runner.find_child("MainMenu")
 	settings_label = main_menu.find_child("SettingsLabel")
 	settings_component = runner.find_child("Settings")
