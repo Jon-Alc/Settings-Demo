@@ -1,8 +1,6 @@
-# GdUnit generated TestSuite
 class_name TestResolutionConsts
 
 #region Variables
-#region Resolution Test
 ## The path to the expected output json for test__resolution_640x480().
 const TEST_RES_640X480_EXP_PATH : String = \
 	"res://test/data/settings/settings_test_resolution/test__resolution_640x480/expected_output.json"
@@ -49,5 +47,4 @@ const TEST_RESET_TIMEOUT_EXP_PATH : String = \
 ##The path to the expected output json for test__resolution_cancel().
 const TEST_RESET_CANCEL_EXP_PATH : String = \
 	"res://test/data/settings/settings_test_resolution/test__resolution_cancel/expected_output.json"
-#endregion
 #endregion
