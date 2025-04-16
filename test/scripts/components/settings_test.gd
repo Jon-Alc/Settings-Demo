@@ -27,6 +27,8 @@ func before(
 	do_skip : bool=DisplayServer.get_name().contains("headless"),
 	skip_reason : String="Cannot run scene runner tests in headless mode."
 ) -> void:
+	print("GET NAME: %s" % % DisplayServer.get_name())
+	print("DOES IT CONTAIN HEADLESS? : %s" % DisplayServer.get_name().contains("headless"))
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 

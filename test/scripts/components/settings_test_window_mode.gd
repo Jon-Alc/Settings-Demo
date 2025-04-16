@@ -107,7 +107,6 @@ func _window_mode_picker(
 	var expected_dict : Dictionary = utilities.get_json_data(exp_output_path)
 	var actual_dict : Dictionary
 	var window_mode_options : OptionButton
-	var accept_button : Button
 	var save_changes_button : Button
 	
 	# Act
