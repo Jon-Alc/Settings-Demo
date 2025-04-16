@@ -23,12 +23,14 @@ var utilities : TestUtilities = TestUtilities.new()
 
 ## before any test, set up DirAccess
 @warning_ignore('unused_parameter')
-func before(
-	do_skip : bool=DisplayServer.get_name().contains("headless"),
-	skip_reason : String="Cannot run scene runner tests in headless mode."
-) -> void:
-	print("(SETTINGS_TEST_WINDOW_MODE) GET NAME: %s" % DisplayServer.get_name())
-	print("DOES IT CONTAIN HEADLESS? : %s" % DisplayServer.get_name().contains("headless"))
+#func before(
+	#do_skip : bool=DisplayServer.get_name().contains("headless"),
+	#skip_reason : String="Cannot run scene runner tests in headless mode."
+#) -> void:
+func before() -> void:
+	#print("(SETTINGS_TEST_WINDOW_MODE) GET NAME: %s" % DisplayServer.get_name())
+	#print("DOES IT CONTAIN HEADLESS? : %s" % DisplayServer.get_name().contains("headless"))
+	print("(SETTINGS_TEST_WINDOW_MODE) WINDOW_SIZE: %s" % DisplayServer.window_get_size())
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
@@ -51,6 +53,7 @@ func after() -> void:
 ## proper settings are applied.
 func test__window_mode_fullscreen() -> void:
 	_load_scene_and_nodes()
+	print("(SETTINGS_TEST_WINDOW_MODE_FULLSCREEN) WINDOW_SIZE: %s" % DisplayServer.window_get_size())
 	await _window_mode_picker(
 		wm_consts.TEST_WM_FULLSCREEN_EXP_PATH,
 		GlobalEnums.WindowModeSettingsID.FULLSCREEN,
