@@ -124,5 +124,6 @@ func _vsync_picker(
 
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
+	print("Current vsync mode %s is expected to be %s" % [DisplayServer.window_get_vsync_mode(), exp_vsync_mode])
 	assert_that(DisplayServer.window_get_vsync_mode()).is_equal(exp_vsync_mode)
 #endregion

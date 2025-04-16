@@ -96,6 +96,8 @@ func test__reset_to_default() -> void:
 	
 	# DisplayPrompt gets instantiated, find it and assert it exists
 	display_prompt = runner.find_child("DisplayPrompt")
+	await runner.simulate_frames(1)
+	print("WAS DISPLAY PROMPT FOUND? %s" % display_prompt)
 	assert_that(display_prompt).is_not_null()
 	assert_bool(display_prompt.visible).is_true()
 	
