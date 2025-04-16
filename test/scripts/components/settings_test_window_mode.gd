@@ -21,13 +21,14 @@ var utilities : TestUtilities = TestUtilities.new()
 #endregion
 
 
-## before any test, skip the suite if the window is embedded
-## otherwise, set up DirAccess
+## before any test, set up DirAccess
 @warning_ignore('unused_parameter')
 func before(
 	do_skip : bool=DisplayServer.get_name().contains("headless"),
 	skip_reason : String="Cannot run scene runner tests in headless mode."
 ) -> void:
+	print("(SETTINGS_TEST_WINDOW_MODE) GET NAME: %s" % % DisplayServer.get_name())
+	print("DOES IT CONTAIN HEADLESS? : %s" % DisplayServer.get_name().contains("headless"))
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
