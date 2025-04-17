@@ -267,18 +267,31 @@ func _read_settings() -> void:
 	var sound_volume_value : int = settings_dict["sound_volume"]
 	
 	resolution_setting = GlobalEnums.str_to_display_settings_id(resolution_value)
+	window_mode_setting = GlobalEnums.str_to_window_mode_settings_id(window_mode_value)
+	vsync_setting = GlobalEnums.str_to_vsync_settings_id(vsync_value)
+	
+	if resolution_setting == GlobalEnums.DisplaySettingsID.NULL or \
+		window_mode_setting == GlobalEnums.WindowModeSettingsID.NULL or \
+		vsync_setting == GlobalEnums.VSyncSettingsID.NULL:
+		print("settings.json settings are invalid, re-initializing settings...")
+		_initialize_settings()
+		_read_settings()
+		return
+		
 	current_resolution = resolution_setting
 	resolution_options.selected = resolution_setting
 	
-	window_mode_setting = GlobalEnums.str_to_window_mode_settings_id(window_mode_value)
+
 	current_window_mode = window_mode_setting
 	window_mode_options.selected = window_mode_setting
 	
-	max_framerate_setting = max_framerate_value
+	# validate framerate setting; it must be between 30 and 999
+	max_framerate_setting = min(999, max_framerate_value)
+	max_framerate_setting = max(30, max_framerate_setting)
 	current_max_framerate = max_framerate_value
 	framerate_spin_box.value = current_max_framerate
 	
-	vsync_setting = GlobalEnums.str_to_vsync_settings_id(vsync_value)
+
 	current_vsync = vsync_setting
 	vsync_options.selected = vsync_setting
 	

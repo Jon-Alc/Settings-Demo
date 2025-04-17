@@ -53,7 +53,7 @@ func test__resolution_640x480(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(640, 480),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >640x480)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_640X480_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._640x480,
@@ -68,7 +68,7 @@ func test__resolution_800x600(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(800, 600),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >800x600)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_800X600_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._800x600,
@@ -84,7 +84,7 @@ func test__resolution_1366x768(
 	skip_reason : String="Monitor size does not meet requirements for test (min: >1366x768)."
 ) -> void:
 	utilities.replace_test_settings_data(res_consts.TEST_RES_1366X768_DUMMY_PATH)
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_1366X768_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1366x768,
@@ -99,7 +99,7 @@ func test__resolution_1600x900(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1600, 900),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >1600x900)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_1600X900_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1600x900,
@@ -114,7 +114,7 @@ func test__resolution_1920x1080(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1920, 1080),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >1920x1080)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_1920X1080_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1920x1080,
@@ -129,7 +129,7 @@ func test__resolution_1920x1200(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(1920, 1200),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >1920x1200)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_1920X1200_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._1920x1200,
@@ -144,7 +144,7 @@ func test__resolution_2560x1440(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(2560, 1440),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >2560x1440)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_2560X1440_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._2560x1440,
@@ -159,7 +159,7 @@ func test__resolution_2560x1600(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(2560, 1600),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >2560x1600)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_2560X1600_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._2560x1600,
@@ -174,7 +174,7 @@ func test__resolution_3840x2160(
 	do_skip: bool=DisplayServer.screen_get_size() <= Vector2i(3840, 2160),
 	skip_reason : String="Monitor size does not meet requirements for test (min: >3840x2160)."
 ) -> void:
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	await _select_resolution_test_helper(
 		res_consts.TEST_RES_3840X2160_EXP_PATH,
 		GlobalEnums.DisplaySettingsID._3840x2160,
@@ -190,7 +190,7 @@ func test__resolution_timeout() -> void:
 	var actual_dict : Dictionary
 	var resolution_options : OptionButton
 	var display_prompt : Control
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	# Act
 	# go to settings
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
@@ -222,7 +222,7 @@ func test__resolution_cancel() -> void:
 	var resolution_options : OptionButton
 	var display_prompt : Control
 	var cancel_button : Button
-	_load_scene_and_nodes()
+	await _load_scene_and_nodes()
 	# Act
 	# go to settings
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
@@ -244,6 +244,9 @@ func test__resolution_cancel() -> void:
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	assert_dict(actual_dict).is_equal(expected_dict)
 	assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(1366, 768))
+	
+	
+## TODO: Load invalid resolution; put an invalid string in settings.json
 #endregion
 
 
@@ -254,6 +257,7 @@ func test__resolution_cancel() -> void:
 ## - find relevant settings nodes
 func _load_scene_and_nodes() -> void:
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
+	await runner.simulate_frames(1)
 	main_menu = runner.find_child("MainMenu")
 	settings_label = main_menu.find_child("SettingsLabel")
 	settings_component = runner.find_child("Settings")

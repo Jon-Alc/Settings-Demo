@@ -27,8 +27,6 @@ func before(
 	do_skip : bool=DisplayServer.get_name().contains("headless"),
 	skip_reason : String="Cannot run scene runner tests in headless mode."
 ) -> void:
-	print("(SETTINGS_TEST) GET NAME: %s" % % DisplayServer.get_name())
-	print("DOES IT CONTAIN HEADLESS? : %s" % DisplayServer.get_name().contains("headless"))
 	test_dir = DirAccess.open(consts.TEST_SETTINGS_FOLDER_PATH)
 
 
@@ -81,6 +79,7 @@ func test__reset_to_default() -> void:
 	utilities.replace_test_settings_data(settings_consts.TEST_RESET_DUMMY_PATH)
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
 	await runner.simulate_frames(1)
+	print("TEST__RESET_TO_DEFAULT SCREEN SIZE: %s" % DisplayServer.window_get_size())
 	_find_settings_nodes()
 	
 	var expected_dict : Dictionary = utilities.get_json_data(settings_consts.TEST_RESET_EXP_PATH)
@@ -97,6 +96,8 @@ func test__reset_to_default() -> void:
 	
 	# DisplayPrompt gets instantiated, find it and assert it exists
 	display_prompt = runner.find_child("DisplayPrompt")
+	await runner.simulate_frames(1)
+	print("WAS DISPLAY PROMPT FOUND? %s" % display_prompt)
 	assert_that(display_prompt).is_not_null()
 	assert_bool(display_prompt.visible).is_true()
 	
@@ -167,6 +168,9 @@ func test__fix_corrupted_settings() -> void:
 ## called after the runner starts up.
 func _find_settings_nodes() -> void:
 	main_menu = runner.find_child("MainMenu")
+	print("MAIN MENU FOUND? %s" % main_menu)
 	settings_label = main_menu.find_child("SettingsLabel")
+	print("SETTINGS LABEL FOUND? %s" % settings_label)
 	settings_component = runner.find_child("Settings")
+	print("SETTINGS COMPONENT FOUND? %s" % settings_component)
 #endregion

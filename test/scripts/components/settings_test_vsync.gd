@@ -1,5 +1,5 @@
 # GdUnit generated TestSuite
-class_name SettingsTestWindowMode
+class_name SettingsTestVsync
 extends GdUnitTestSuite
 @warning_ignore('unused_parameter')
 @warning_ignore('return_value_discarded')
@@ -16,7 +16,7 @@ var settings_label : Label
 var settings_component : Control
 
 var consts : TestConsts = TestConsts.new()
-var wm_consts : TestWindowModeConsts = TestWindowModeConsts.new()
+var vsync_consts : TestVsyncConsts = TestVsyncConsts.new()
 var utilities : TestUtilities = TestUtilities.new()
 #endregion
 
@@ -45,42 +45,37 @@ func after() -> void:
 
 
 #region Tests
-## test__window_mode_fullscreen() selects the window mode option "Fullscreen" and checks that the
-## proper settings are applied.
-func test__window_mode_fullscreen() -> void:
+## test__vsync_on() enables vsync and checks that the proper settings are applied.
+func test__vsync_on() -> void:
+	utilities.replace_test_settings_data(vsync_consts.TEST_VSYNC_ON_DUMMY_PATH)
 	await _load_scene_and_nodes()
-	await _window_mode_picker(
-		wm_consts.TEST_WM_FULLSCREEN_EXP_PATH,
-		GlobalEnums.WindowModeSettingsID.FULLSCREEN,
-		DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN,
-		false
+	await _vsync_picker(
+		vsync_consts.TEST_VSYNC_ON_EXP_PATH,
+		GlobalEnums.VSyncSettingsID.ON,
+		DisplayServer.VSyncMode.VSYNC_ENABLED
 	)
 
-## test__window_mode_windowed() selects the window mode option "Windowed" and checks that the
-## proper settings are applied.
-func test__window_mode_windowed() -> void:
-	utilities.replace_test_settings_data(wm_consts.TEST_WM_WINDOWED_DUMMY_PATH)
+## test__vsync_off() disables vsync and checks that the proper settings are applied.
+func test__vsync_off() -> void:
 	await _load_scene_and_nodes()
-	await _window_mode_picker(
-		wm_consts.TEST_WM_WINDOWED_EXP_PATH,
-		GlobalEnums.WindowModeSettingsID.WINDOWED,
-		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED,
-		false
+	await _vsync_picker(
+		vsync_consts.TEST_VSYNC_OFF_EXP_PATH,
+		GlobalEnums.VSyncSettingsID.OFF,
+		DisplayServer.VSyncMode.VSYNC_DISABLED
 	)
 
-## test__window_mode_borderless() selects the window mode option "Borderless Windowed" and checks
-## that the proper settings are applied.
-func test__window_mode_borderless() -> void:
+## test__vsync_adaptive() enables the "Adaptive" option for vsync and checks that the proper
+## settings are applied.
+func test__vsync_adaptive() -> void:
 	await _load_scene_and_nodes()
-	await _window_mode_picker(
-		wm_consts.TEST_WM_BORDERLESS_EXP_PATH,
-		GlobalEnums.WindowModeSettingsID.BORDERLESS_WINDOWED,
-		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED,
-		true
+	await _vsync_picker(
+		vsync_consts.TEST_VSYNC_ADAPTIVE_EXP_PATH,
+		GlobalEnums.VSyncSettingsID.ADAPTIVE,
+		DisplayServer.VSyncMode.VSYNC_ADAPTIVE
 	)
 
 
-## TODO: Load invalid window mode; typo string in settings.json
+## TODO: Load invalid vsync option; typo string in settings.json
 #endregion
 
 
@@ -94,31 +89,30 @@ func _load_scene_and_nodes() -> void:
 	settings_component = runner.find_child("Settings")
 
 
-## _window_mode_picker() is used by all window mode tests. It selects a given window mode and
-## compares the settings and window mode to a given file output and window mode.
-## NOTE: This will fail if the window mode is already selected!
-func _window_mode_picker(
+## _vsync_picker() is used by all vsync tests. It selects a given vsync option and
+## compares the settings and vsync to a given file output and vsync enum.
+## NOTE: This will fail if the vsync option is already selected!
+func _vsync_picker(
 	exp_output_path: String,
-	window_mode_setting_enum: GlobalEnums.WindowModeSettingsID,
-	exp_window_mode: DisplayServer.WindowMode,
-	exp_border_flag: bool
+	vsync_setting_enum: GlobalEnums.VSyncSettingsID,
+	exp_vsync_mode: DisplayServer.VSyncMode
 ) -> void:
 	# Arrange
 	var expected_dict : Dictionary = utilities.get_json_data(exp_output_path)
 	var actual_dict : Dictionary
-	var window_mode_options : OptionButton
+	var vsync_options : OptionButton
 	var save_changes_button : Button
 	
 	# Act
 	# go to settings
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 
-	# click the window mode option
-	window_mode_options = runner.find_child("FullscreenOptions")
-	await utilities.move_to_element_and_click(runner, settings_component, window_mode_options)
+	# click the vsync option
+	vsync_options = runner.find_child("VSyncOptions")
+	await utilities.move_to_element_and_click(runner, settings_component, vsync_options)
 
-	# navigate through the window mode options by pressing down, then selecting it with "enter"
-	for i : int in range(window_mode_setting_enum + 1):
+	# navigate through the vsync options by pressing down, then selecting it with "enter"
+	for i : int in range(vsync_setting_enum + 1):
 		runner.simulate_key_press(KEY_DOWN)
 		await runner.await_input_processed()
 	runner.simulate_key_press(KEY_ENTER)
@@ -133,6 +127,6 @@ func _window_mode_picker(
 
 	# Assert
 	assert_dict(actual_dict).is_equal(expected_dict)
-	assert_that(DisplayServer.window_get_mode()).is_equal(exp_window_mode)
-	assert_that(DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_BORDERLESS)).is_equal(exp_border_flag)
+	print("Current vsync mode %s is expected to be %s" % [DisplayServer.window_get_vsync_mode(), exp_vsync_mode])
+	assert_that(DisplayServer.window_get_vsync_mode()).is_equal(exp_vsync_mode)
 #endregion
