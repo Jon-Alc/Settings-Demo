@@ -244,6 +244,9 @@ func test__resolution_cancel() -> void:
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	assert_dict(actual_dict).is_equal(expected_dict)
 	assert_that(DisplayServer.window_get_size()).is_equal(Vector2i(1366, 768))
+	
+	
+## TODO: Load invalid resolution; put an invalid string in settings.json
 #endregion
 
 

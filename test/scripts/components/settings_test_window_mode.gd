@@ -78,6 +78,9 @@ func test__window_mode_borderless() -> void:
 		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED,
 		true
 	)
+
+
+## TODO: Load invalid window mode; typo string in settings.json
 #endregion
 
 

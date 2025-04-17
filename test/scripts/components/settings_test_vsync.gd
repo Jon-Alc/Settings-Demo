@@ -73,6 +73,9 @@ func test__vsync_adaptive() -> void:
 		GlobalEnums.VSyncSettingsID.ADAPTIVE,
 		DisplayServer.VSyncMode.VSYNC_ADAPTIVE
 	)
+
+
+## TODO: Load invalid vsync option; typo string in settings.json
 #endregion
 
 

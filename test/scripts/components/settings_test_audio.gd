@@ -15,7 +15,6 @@ var main_menu : Control
 var settings_label : Label
 var settings_component : Control
 var save_changes_button : Button
-var original_dict : Dictionary
 var actual_dict : Dictionary
 
 var consts : TestConsts = TestConsts.new()
@@ -37,6 +36,7 @@ func before(
 ## - delete the test settings.json if one exists
 func before_test() -> void:
 	test_dir.remove("settings.json")
+	await _load_scene_and_shared()
 
 
 ## after all tests:
@@ -51,7 +51,7 @@ func after() -> void:
 ## test__audio_master() checks that the slider affects the master audio bus in Godot.
 func test__audio_master() -> void:
 	# Arrange
-	await _load_scene_and_shared(audio_consts.TEST_AUDIO_MASTER_EXP_PATH)
+	var original_dict : Dictionary = utilities.get_json_data(audio_consts.TEST_AUDIO_MASTER_ORIG_PATH)
 	# Act
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	var master_slider : HSlider = runner.find_child("MasterVolumeSlider")
@@ -60,7 +60,7 @@ func test__audio_master() -> void:
 	var master_volume : float = AudioServer.get_bus_volume_linear(GlobalEnums.AudioBusIndex.MASTER)
 	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
 	# Assert
-	assert_int(int(master_slider.value)).is_equal(int(master_volume * 100))
+	assert_int(int(master_slider.value)).is_equal(roundi(master_volume * 100))
 	assert_int(int(master_volume)).is_not_equal(75)
 	assert_dict(actual_dict).is_not_equal(original_dict)
 
@@ -68,7 +68,7 @@ func test__audio_master() -> void:
 ## test__audio_music() checks that the slider affects the music audio bus in Godot.
 func test__audio_music() -> void:
 	# Arrange
-	await _load_scene_and_shared(audio_consts.TEST_AUDIO_MUSIC_EXP_PATH)
+	var original_dict : Dictionary = utilities.get_json_data(audio_consts.TEST_AUDIO_MUSIC_ORIG_PATH)
 	# Act
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	var music_slider : HSlider = runner.find_child("MusicVolumeSlider")
@@ -85,7 +85,7 @@ func test__audio_music() -> void:
 ## test__audio_sfx() checks that the slider affects the sfx audio bus in Godot.
 func test__audio_sfx() -> void:
 	# Arrange
-	await _load_scene_and_shared(audio_consts.TEST_AUDIO_SFX_EXP_PATH)
+	var original_dict : Dictionary = utilities.get_json_data(audio_consts.TEST_AUDIO_SFX_ORIG_PATH)
 	# Act
 	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
 	var sfx_slider : HSlider = runner.find_child("SFXVolumeSlider")
@@ -97,15 +97,31 @@ func test__audio_sfx() -> void:
 	assert_int(int(sfx_slider.value)).is_equal(int(sfx_volume * 100))
 	assert_int(int(sfx_volume)).is_not_equal(75)
 	assert_dict(actual_dict).is_not_equal(original_dict)
+
+
+## test__audio_play_in_bg() checks that the "Play in Background" checkbox toggles a setting to mute
+## the game when not focused.
+func test__audio_play_in_bg() -> void:
+	# Arrange
+	var expected_dict : Dictionary = utilities.get_json_data(audio_consts.TEST_AUDIO_PLAY_IN_BG_EXP_PATH)
+	# Act
+	await utilities.move_to_element_and_click(runner, settings_component, settings_label)
+	var bg_checkbox : CheckBox = runner.find_child("BackgroundCheckBox")
+	await utilities.move_to_element_and_click(runner, settings_component, bg_checkbox)
+	await utilities.move_to_element_and_click(runner, settings_component, save_changes_button)
+	actual_dict = utilities.get_json_data(consts.TEST_SETTINGS_FILE_PATH)
+	# Assert
+	assert_dict(actual_dict).is_equal(expected_dict)
+
+
+## TODO: Load invalid audio amounts; <0, >100
 #endregion
 
 
 #region Test Helpers
 ## _load_scene_and_shared() loads the test scene and gets the shared nodes.
-func _load_scene_and_shared(orig_output_path : String) -> void:
+func _load_scene_and_shared() -> void:
 	runner = scene_runner(consts.TEST_STARTUP_SCENE_PATH)
-	DisplayServer.window_set_size(Vector2(1366, 768))
-	original_dict = utilities.get_json_data(orig_output_path)
 	await runner.simulate_frames(1)
 	main_menu = runner.find_child("MainMenu")
 	settings_label = main_menu.find_child("SettingsLabel")
